@@ -1,4 +1,4 @@
-function plotBar(fpObj,saveFigures)
+function plotBar(fpObj,inspectRange,saveFigures)
 %initialization
 totalMouseNum = fpObj.totalMouseNum;
 %check directory and make dir if does not exists
@@ -128,20 +128,28 @@ for numMouse = 1:totalMouseNum
         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.jpg'])
         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.svg'])
     end
-    %% bar graph -5 to 0 vs 0 to 5 sec
+    %% inspect range bar graph
     
-    inspectRange = [-5 5];
-    inspectRangeIdx = inspectRange*samplingRate; %-610 610
-    firstBoutDffArray = fpObj.idvData(numMouse).firstBoutDffArray;
-    firstHalfIdx = abs(examRangeIdx(1));
-    beforeLickDff = firstBoutDffArray(:,firstHalfIdx - abs(inspectRangeIdx(1))-1:firstHalfIdx-1);
-    afterLickDff = firstBoutDffArray(:,firstHalfIdx:firstHalfIdx+inspectRangeIdx(2));
+    %initialize
+
+    inspectRangeIdx = inspectRange*samplingRate; 
+    boutIdx = fpObj.idvData(numMouse).boutIdx;
+    totalNumBout = fpObj.idvData(numMouse).totalNumBout;
+    inspectRangeBoutIdx = [boutIdx(:,1) boutIdx(:,1)] + repmat(inspectRangeIdx,[size(boutIdx,1) 1]);
+    firstBoutDffArray = [];
+    for boutNum = 1:totalNumBout
+        firstBoutDffArray(boutNum,:) = dFF(inspectRangeBoutIdx(boutNum,1):inspectRangeBoutIdx(boutNum,2),1);
+    end
+    
+    firstHalfIdx = abs(inspectRangeIdx(1));
+    beforeLickDff = firstBoutDffArray(:, 1 : firstHalfIdx);
+    afterLickDff = firstBoutDffArray(:,firstHalfIdx+1:end);
     
     meanBeforeLickDff = mean(beforeLickDff,2);
     meanAfterLickDff = mean(afterLickDff,2);
     %mean of mean
-    mOmBeforeLickDff = mean(meanBeforeLickDff);
-    mOmAfterLickDff = mean(meanAfterLickDff);
+    mOmBeforeLickDff(numMouse) = mean(meanBeforeLickDff);
+    mOmAfterLickDff(numMouse) = mean(meanAfterLickDff);
     %ste of mean
     ste_mOmBeforeLickDff = std(meanBeforeLickDff)/sqrt(size(meanBeforeLickDff,1));
     ste_mOmAfterLickDff = std(meanAfterLickDff)/sqrt(size(meanBeforeLickDff,1));
@@ -149,12 +157,13 @@ for numMouse = 1:totalMouseNum
     
     
     
-    figure
+    figure('visible','off');
+
     hold on
     
-    b_1 = bar(1,mOmBeforeLickDff,'FaceColor',[1 1 1],'LineWidth',1.6);
-    b_2 = bar(2,mOmAfterLickDff,'FaceColor',[0.5 0.5 0.5],'LineWidth',1.6);
-    errorbar(1:2,[mOmBeforeLickDff mOmAfterLickDff],[ste_mOmBeforeLickDff ste_mOmAfterLickDff],'.','Color','k','linewidth',1.3)
+    b_1 = bar(1,mOmBeforeLickDff(numMouse),'FaceColor',[1 1 1],'LineWidth',1.6);
+    b_2 = bar(2,mOmAfterLickDff(numMouse),'FaceColor',[0.5 0.5 0.5],'LineWidth',1.6);
+    errorbar(1:2,[mOmBeforeLickDff(numMouse) mOmAfterLickDff(numMouse)],[ste_mOmBeforeLickDff ste_mOmAfterLickDff],'.','Color','k','linewidth',1.3)
     set(gca,'xtick',[])
     Labels = {'Before Lick', 'After Lick'};
     set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
@@ -173,9 +182,10 @@ for numMouse = 1:totalMouseNum
     set(gca,'box','off')
     set(gca,'TickDir','out'); % The only other option is 'in'
     
+    
+    
     %     export_fig([fpObj.idvData(numMouse).Description ' before vs after Lick'],'-eps','-jpg')
     if saveFigures =='y' || saveFigures =='Y'
-        
         saveas(gcf,[fpObj.idvData(numMouse).Description '  before vs after Lick.jpg'])
         saveas(gcf,[fpObj.idvData(numMouse).Description '  before vs after Lick.svg'])
     end
@@ -215,7 +225,51 @@ if saveFigures =='y' || saveFigures =='Y'
     saveas(gcf,[fpObj.idvData(numMouse).Description ' meanOfmean.jpg'])
     saveas(gcf,[fpObj.idvData(numMouse).Description ' meanOfmean.svg'])
 end
+%%  mean of mean of mean  
 
+% mOmBeforeLickDff
+mOmOmBeforeLickDff= mean(mOmBeforeLickDff);
+mOmOmAfterLickDff = mean(mOmAfterLickDff);
+%ste of mean
+ste_mOmOmBeforeLickDff = std(mOmBeforeLickDff)/sqrt(size(mOmBeforeLickDff,2));
+ste_mOmOmAfterLickDff = std(mOmAfterLickDff)/sqrt(size(mOmBeforeLickDff,2));
+
+
+
+
+figure
+hold on
+
+b_1 = bar(1,mOmOmBeforeLickDff,'FaceColor',[0 .6 .6],'LineWidth',1.6);
+b_2 = bar(2,mOmOmAfterLickDff,'FaceColor',[0 0.2 0.2],'LineWidth',1.6);
+errorbar(1:2,[mOmOmBeforeLickDff mOmOmAfterLickDff],[ste_mOmOmBeforeLickDff ste_mOmOmAfterLickDff],'.','Color','k','linewidth',1.3)
+set(gca,'xtick',[])
+Labels = {'Before Lick', 'After Lick'};
+set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
+% set(h(1),'FaceColor','b');
+% set(h(2),'FaceColor','k');
+
+%Ylabel
+ylabel('\DeltaF/F (%)');
+%ylim,other stuff
+set(gcf,'Color',[1 1 1])
+set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial')
+
+title({[fpObj.groupInfo{1,1} ' Before vs After Lick: mOmOm'];...
+    ['Range = ' num2str(inspectRange) ' sec']}, 'FontSize',10)
+
+set(gca,'box','off')
+set(gca,'TickDir','out'); % The only other option is 'in'
+
+
+
+%     export_fig([fpObj.idvData(numMouse).Description ' before vs after Lick'],'-eps','-jpg')
+if saveFigures =='y' || saveFigures =='Y'
+    saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.jpg'])
+    saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.svg'])
+end
+
+%%
 cd ..
 
 end
