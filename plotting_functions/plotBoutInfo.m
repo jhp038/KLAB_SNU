@@ -44,7 +44,6 @@ for numMouse = 1:totalMouseNum
         maxNormDff =  [maxNormDff; max(normalizedDff(startIdx:endIdx))];
         
         totalLickingBout =[totalLickingBout; size(find(lickingIdx >=startIdx & lickingIdx <=endIdx),1)];
-        
     end
     
     plot(totalLickingBout,maxNormDff,'.','MarkerSize',15)
@@ -54,6 +53,8 @@ for numMouse = 1:totalMouseNum
     set(gca,'TickDir','out');
     xlabel('Licking Number')%,'FontSize',18)
     ylabel('Normalized Max \DeltaF/F');
+    mouseID{numMouse,1} =num2str(fpObj.idvData(numMouse).mouseID);
+
     %% Fitting polyfit(2nd degree) 
     
 %     
@@ -70,8 +71,7 @@ for numMouse = 1:totalMouseNum
 % plot(f2,totalLickingBout,maxNormDff)
 % 
 %     
-%     mouseID{numMouse,1} =num2str(fpObj.idvData(numMouse).mouseID);
-%     
+    
 end
 legend(mouseID,'Location','northeastoutside')
 if saveFigures =='y' || saveFigures =='Y'

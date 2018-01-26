@@ -1,4 +1,4 @@
-function fpObj = applyParameters(fpObj,factor,examRange,waveMode,alignMode)
+function fpObj = applyParameters(fpObj,guiOut)%factor,examRange,waveMode,alignMode)
 %% applyParameters
 %Written by Han Heol Park and Jong Hwi Park
 % 09/15/2017
@@ -9,6 +9,10 @@ function fpObj = applyParameters(fpObj,factor,examRange,waveMode,alignMode)
 
 totalfpObjNum = size(fpObj,2);
 availableWaveMode = {'continuous','start','repeat'};
+factor = guiOut.subsamplingRate;
+examRange =  [guiOut.start_examRange guiOut.end_examRange];
+waveMode =  guiOut.waveMode;
+alignMode =  guiOut.alignMode;
 
 for fpObjNum = 1: totalfpObjNum
     %% set sub sampling Rate
@@ -42,7 +46,7 @@ end
 %     '\n    Exam Range    :\t' examRange...
 %     '\n    Wave Mode     :\t' guiOut.waveMode{:} ...
 %     '\n    Align Mode    :\t' guiOut.alignMode...
-%     '\n Trimming Option  :\t' guiOut.trimmingOption]  
+%     '\n Trimming Option  :\t' guiOut.trimmingOption];
 % fprintf(outputString)
 
 

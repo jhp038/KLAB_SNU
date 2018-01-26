@@ -1,8 +1,8 @@
 clear all;close all
 
-%load data
+%load data if directory/file does not exist
+% checkFPObj
 fpObj = FPObjMake;
-
 %data pre processing
 guiOut = fpGUI_2;
 fpObj = applyParameters(fpObj,guiOut.subsamplingRate,... %su b sample
@@ -14,10 +14,13 @@ fpObj = getTTLOnOffTime(fpObj);
 fpObj = getEventWindowIdx(fpObj);
 trimGuiOut = trimmingGUI_2;
 %trimming data and get dFF
- fpObj = setDataTrimming(fpObj,trimGuiOut);
+fpObj = setDataTrimming(fpObj,trimGuiOut);
 fpObj = getTimeVectors(fpObj);
 fpObj = applyTrimmingOffset(fpObj); 
 fpObj = calculatedFF_choice(fpObj);
+% saveFPObj
+
+
 
 %%
 
