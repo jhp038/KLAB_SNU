@@ -26,8 +26,11 @@ for numMouse = 1:totalMouseNum
     
     %% Plotting dFF with bout
     
-    
-    figure('Units','inch','Position',[left bottom width+2 height],'visible','off');
+    if saveFigures == 'Y'|| saveFigures == 'y'
+        figure('Units','inch','Position',[left bottom width+2 height],'visible','off');
+    else
+        figure('Units','inch','Position',[left bottom width+2 height],'visible','on');
+    end
     set(gcf,'renderer','Painters')
 
     left = left + width+2+.2;

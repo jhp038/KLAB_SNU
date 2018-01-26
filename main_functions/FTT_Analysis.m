@@ -5,10 +5,8 @@ fpObj = FPObjMake;
 
 %data pre processing
 guiOut = fpGUI_2;
-fpObj = applyParameters(fpObj,guiOut.subsamplingRate,... %sub sample
-    [guiOut.start_examRange guiOut.end_examRange],...    %set exam Range
-    guiOut.waveMode,...                                  %set wave mode
-    guiOut.alignMode);                                   %set align mode
+fpObj = applyParameters(fpObj,guiOut);
+
 
 fpObj = getTTLOnOffTime(fpObj);
 

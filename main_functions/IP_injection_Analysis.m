@@ -19,5 +19,5 @@ fpObj = calculatedFF_choice(fpObj);
 
 %% Analysis part for IP injection data
 
-examRange = [-100 900]; %sec;
+examRange = [-300 2300]; %sec;
 fpObj = preprocess_IP_injectionData(fpObj,examRange); %this function retrim data according to TTL pulses that signal 15min window. 
