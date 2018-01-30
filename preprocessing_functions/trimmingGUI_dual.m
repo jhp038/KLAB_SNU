@@ -1,35 +1,35 @@
-function varargout = trimmingGUI(varargin)
-% TRIMMINGGUI_2 MATLAB code for trimmingGUI_2.fig
-%      TRIMMINGGUI_2, by itself, creates a new TRIMMINGGUI_2 or raises the existing
+function varargout = trimmingGUI_dual(varargin)
+% TRIMMINGGUI_DUAL MATLAB code for trimmingGUI_dual.fig
+%      TRIMMINGGUI_DUAL, by itself, creates a new TRIMMINGGUI_DUAL or raises the existing
 %      singleton*.
 %
-%      H = TRIMMINGGUI_2 returns the handle to a new TRIMMINGGUI_2 or the handle to
+%      H = TRIMMINGGUI_DUAL returns the handle to a new TRIMMINGGUI_DUAL or the handle to
 %      the existing singleton*.
 %
-%      TRIMMINGGUI_2('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in TRIMMINGGUI_2.M with the given input arguments.
+%      TRIMMINGGUI_DUAL('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in TRIMMINGGUI_DUAL.M with the given input arguments.
 %
-%      TRIMMINGGUI_2('Property','Value',...) creates a new TRIMMINGGUI_2 or raises the
+%      TRIMMINGGUI_DUAL('Property','Value',...) creates a new TRIMMINGGUI_DUAL or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before trimmingGUI_2_OpeningFcn gets called.  An
+%      applied to the GUI before trimmingGUI_dual_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to trimmingGUI_2_OpeningFcn via varargin.
+%      stop.  All inputs are passed to trimmingGUI_dual_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help trimmingGUI_2
+% Edit the above text to modify the response to help trimmingGUI_dual
 
-% Last Modified by GUIDE v2.5 11-Sep-2017 16:48:03
+% Last Modified by GUIDE v2.5 29-Jan-2018 13:27:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @trimmingGUI_2_OpeningFcn, ...
-                   'gui_OutputFcn',  @trimmingGUI_2_OutputFcn, ...
+                   'gui_OpeningFcn', @trimmingGUI_dual_OpeningFcn, ...
+                   'gui_OutputFcn',  @trimmingGUI_dual_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,15 +44,15 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before trimmingGUI_2 is made visible.
-function trimmingGUI_2_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before trimmingGUI_dual is made visible.
+function trimmingGUI_dual_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to trimmingGUI_2 (see VARARGIN)
+% varargin   command line arguments to trimmingGUI_dual (see VARARGIN)
 
-% Choose default command line output for trimmingGUI_2
+% Choose default command line output for trimmingGUI_dual
 handles.output = hObject;
 handles.fpObj = evalin('base','fpObj');
 fpObj = handles.fpObj;
@@ -129,12 +129,12 @@ guidata(hObject, handles);
 % wait to close
 uiwait(handles.figure1);
 
-% UIWAIT makes trimmingGUI_2 wait for user response (see UIRESUME)
+% UIWAIT makes trimmingGUI_dual wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = trimmingGUI_2_OutputFcn(hObject, eventdata, handles) 
+function varargout = trimmingGUI_dual_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -170,11 +170,15 @@ RawDataArray = handles.RawDataArray;
 
 %replot
 cla
-plot(RawDataArray{selectedID}(:,2),'r')    
+
+plot(RawDataArray{selectedID}(:,2),'Color',[.6 0 0])    
 hold on
-plot(RawDataArray{selectedID}(:,3),'b')
-plot(RawDataArray{selectedID}(:,4:end)*50,'g')   %syk
-legend('473','405','event');
+plot(RawDataArray{selectedID}(:,3),'Color',[0 0 .6])
+
+plot(RawDataArray{selectedID}(:,4),'r')    
+plot(RawDataArray{selectedID}(:,5),'b')
+plot(RawDataArray{selectedID}(:,6:end)*50,'g')   %syk
+% legend('473','405','event');
 xlabel('index number')
 
 %set as 0
@@ -238,11 +242,16 @@ disp(['accepted']);
 %When reseting, erase previously selected range as 0
 %replot
 cla
-p473 = plot(RawDataArray{selectedID}(:,2),'r');
+p473 = plot(RawDataArray{selectedID}(:,2),'Color',[.6 0 0])    
 hold on
-p405 = plot(RawDataArray{selectedID}(:,3),'b');
-pEvent = plot(RawDataArray{selectedID}(:,4:end)*50,'g');
-legend('473','405','event');
+p405 = plot(RawDataArray{selectedID}(:,3),'Color',[0 0 .6])
+
+
+plot(RawDataArray{selectedID}(:,4),'r')    
+plot(RawDataArray{selectedID}(:,5),'b')
+pEvent = plot(RawDataArray{selectedID}(:,6:end)*50,'g');
+
+% legend('473','405','event');
 xlabel('index number')
 
 [trimmingRange(selectedID,1),~] = ginput(1);
@@ -257,10 +266,16 @@ trimmingRange = round(trimmingRange);
 if trimmingRange(selectedID,1) ~= 0   
     %added
     trimmedRawData = RawDataArray{selectedID}(trimmingRange(selectedID,1):trimmingRange(selectedID,2),:);
+    
     bls1 = polyfit (trimmedRawData(:,3),trimmedRawData(:,2),1);
     y_fit_1 = polyval(bls1,trimmedRawData(:,3)); %fitted 405nm
-    pFITTED = plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'m');
-    lgd = legend([p473 p405 pEvent pFITTED],'473','405','event','fitted');
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'Color',[.3 0 .3])
+    
+    hold on
+    bls2 = polyfit (trimmedRawData(:,5),trimmedRawData(:,4),1);
+    y_fit_2 = polyval(bls2,trimmedRawData(:,5)); %fitted 405nm
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_2,'m')
+%     lgd = legend([p473 p405 pEvent pFITTED],'473','405','event','fitted');
 end
 
 %update array
@@ -286,11 +301,16 @@ RawDataArray = handles.RawDataArray;
 %plotting
 cla
 selectedID = get(hObject,'Value');
-plot(RawDataArray{selectedID}(:,2),'r')    
+
+plot(RawDataArray{selectedID}(:,2),'Color',[.6 0 0])    
 hold on
-plot(RawDataArray{selectedID}(:,3),'b')
-plot(RawDataArray{selectedID}(:,4:end)*50,'g')   %syk
-legend('473','405','event');
+plot(RawDataArray{selectedID}(:,3),'Color',[0 0 .6])
+
+plot(RawDataArray{selectedID}(:,4),'r')    
+plot(RawDataArray{selectedID}(:,5),'b')
+plot(RawDataArray{selectedID}(:,6:end)*50,'g')   %syk
+
+% legend('473','405','event');
 xlabel('index number')
 
 %plotting selected range
@@ -300,8 +320,12 @@ if trimmingRange(selectedID,1) ~= 0
     trimmedRawData = RawDataArray{selectedID}(trimmingRange(selectedID,1):trimmingRange(selectedID,2),:);
     bls1 = polyfit (trimmedRawData(:,3),trimmedRawData(:,2),1);
     y_fit_1 = polyval(bls1,trimmedRawData(:,3)); %fitted 405nm
-    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'m')
-    lgd = legend('473','405','event','fitted');
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'Color',[.3 0 .3])
+    
+    hold on
+    bls2 = polyfit (trimmedRawData(:,5),trimmedRawData(:,4),1);
+    y_fit_2 = polyval(bls2,trimmedRawData(:,5)); %fitted 405nm
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_2,'m')
 
     plot([trimmingRange(selectedID,1) trimmingRange(selectedID,1)],ylim,'black');
     plot([trimmingRange(selectedID,2) trimmingRange(selectedID,2)],ylim,'black');
@@ -366,11 +390,15 @@ set(handles.start,'Visible','Off')
 
 cla
 selectedID = get(hObject,'Value');
-plot(RawDataArray{selectedID}(:,2),'r')    
+plot(RawDataArray{selectedID}(:,2),'Color',[.6 0 0])    
 hold on
-plot(RawDataArray{selectedID}(:,3),'b')
-plot(RawDataArray{selectedID}(:,4:end)*50,'g')   %syk
-lgd = legend('473','405','event');
+plot(RawDataArray{selectedID}(:,3),'Color',[0 0 .6])
+
+plot(RawDataArray{selectedID}(:,4),'r')    
+plot(RawDataArray{selectedID}(:,5),'b')
+
+plot(RawDataArray{selectedID}(:,6:end)*50,'g')   %syk
+% lgd = legend('473','405','event');
 xlabel('Time (s)')
 
 trimmingRange = handles.trimmingRange;
@@ -381,8 +409,13 @@ if trimmingRange(selectedID,1) ~= 0
     trimmedRawData = RawDataArray{selectedID}(trimmingRange(selectedID,1):trimmingRange(selectedID,2),:);
     bls1 = polyfit (trimmedRawData(:,3),trimmedRawData(:,2),1);
     y_fit_1 = polyval(bls1,trimmedRawData(:,3)); %fitted 405nm
-    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'m')
-    lgd = legend('473','405','event','fitted');
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_1,'Color',[.3 0 .3])
+    
+    hold on
+    bls2 = polyfit (trimmedRawData(:,5),trimmedRawData(:,4),1);
+    y_fit_2 = polyval(bls2,trimmedRawData(:,5)); %fitted 405nm
+    plot(trimmingRange(selectedID,1): trimmingRange(selectedID,2) , y_fit_2,'m')
+%     lgd = legend('473','405','event','fitted');
 
     plot([trimmingRange(selectedID,1) trimmingRange(selectedID,1)],ylim,'black');
     plot([trimmingRange(selectedID,2) trimmingRange(selectedID,2)],ylim,'black');

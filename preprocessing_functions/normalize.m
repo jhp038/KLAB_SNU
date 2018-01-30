@@ -1,7 +1,5 @@
 function fpObj = normalize(fpObj)
 %%
-totalfpObjNum = size(fpObj,2);
-for fpObjNum = 1:totalfpObjNum
     %% Initialization
     totalMouseNum = fpObj(fpObjNum).totalMouseNum;
     totalWaveNum = fpObj(fpObjNum).waveNum;
@@ -50,13 +48,10 @@ for fpObjNum = 1:totalfpObjNum
     end
     
     %% saving concat Raw and Norm array. Also calculate mean and ste
-%     
-%     fpObj(fpObjNum).concatRawArray = concatRawArray;
-%     fpObj(fpObjNum).concatNormArray = concatNormArray;
+
     fpObj(fpObjNum).meanRawArray = mean(concatMeanArray,1);
     fpObj(fpObjNum).meanNormArray = mean(concatNorm_MeanArray,1);
     fpObj(fpObjNum).steRawArray = std(concatMeanArray,0,1)/sqrt(size(concatMeanArray,1));
     fpObj(fpObjNum).steNormArray = std(concatNorm_MeanArray,0,1)/sqrt(size(concatNorm_MeanArray,1));
     
-end
 end
