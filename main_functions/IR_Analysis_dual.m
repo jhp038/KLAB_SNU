@@ -25,9 +25,10 @@ fpObj = normalize_dual(fpObj,[-10 0]);
 
 %%
 % visualization
-saveChoice = chooseSave; %yes = 1 ; No = 2
-% plotOverlaying_1(fpObj,saveChoice); %overlaying Trace
-plotOverlaying(fpObj,saveChoice);
-plotTrace(fpObj,saveChoice); %individual Trace
-plotHeatmap(fpObj,saveChoice); %individual Heatmap
-plotauROC(fpObj,saveChoice); %plot auROC for individual mouse
+ plotPCorrAnalysis(fpObj)
+% saveChoice = chooseSave; %yes = 1 ; No = 2
+% % plotOverlaying_1(fpObj,saveChoice); %overlaying Trace
+% plotOverlaying(fpObj,saveChoice);
+% plotTrace(fpObj,saveChoice); %individual Trace
+% plotHeatmap(fpObj,saveChoice); %individual Heatmap
+% plotauROC(fpObj,saveChoice); %plot auROC for individual mouse
