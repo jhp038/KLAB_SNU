@@ -15,6 +15,7 @@ thisFrame = read(videoObject, 20);
 % 
 % end
 
+
 %% find LED_On and Off indices from video
 numberOfFrames = videoObject.numberOfFrames;
 meanBlueLevels = zeros(numberOfFrames, 1);

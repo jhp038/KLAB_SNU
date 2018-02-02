@@ -1,4 +1,6 @@
 %% Initialization
+clear all;clc
+
 folder_name = uigetdir;
 
 RawData = Text2Array_miniscope(folder_name);
@@ -17,8 +19,11 @@ TTLOnTimes = timeVectorS(TTLOnIdx);         % TTLPulseTimeS
 
 TTLOffIdx = find(TTLThreshCrossings == -1);  
 TTLOffTimes = timeVectorS(TTLOffIdx);         % TTLPulseTimeS
-
-RawData = RawData(TTLOnIdx:TTLOffIdx,:);
+if size(TTLOffIdx,1)>1
+    RawData = RawData(TTLOnIdx:end,:);
+else
+    RawData = RawData(TTLOnIdx:TTLOffIdx,:);
+end
 RawData(:,1) = RawData(:,1) - RawData(1,1);
 
 k = dsearchn(RawData(:,1),50);
@@ -26,9 +31,12 @@ RawData_processed = RawData(k+1:end,:);
 RawData_processed(:,1) = RawData_processed(:,1) - RawData_processed(1,1);
 
 %load neuron
+filename = uigetfile('*.mat','Select the NEURON file');
+load(filename);
 data = neuron.C;
 data_raw = neuron.C_raw;
-timeV = (0:size(data,2))./5;
+% timeV = (0:size(data,2))./5;
+timeV = linspace(0,size(data,2)/5,size(data,2))
 if timeV(end) < RawData_processed(end,1)
     endIdx = dsearchn(RawData_processed(:,1),timeV(end));
     RawData_processed = RawData_processed(1:endIdx,:);
@@ -47,7 +55,6 @@ TTLThreshCrossings = diff(TTLeventON);      % Find threshold crossings by taking
 
 TTLOnIdx = find(TTLThreshCrossings == 1);      % Find crossings from below
 
-%find 50sec and erase
 
 samplingRate = 102;
 boutWindow = 10;
@@ -56,7 +63,6 @@ numWindow = 10; %number of licks
 
 
 %initialization
-%             disp([num2str(numMouse)]);
 window = round(boutWindow *samplingRate);
 lickingIdx =TTLOnIdx;
 numLicking = size(lickingIdx,1);
@@ -93,8 +99,7 @@ boutIdx(:,2) = lickingIdx(on_off_Idx(:,2));
 
 timeIdx = timeVectorS(boutIdx);
 %% Load neuron data and find timepoint
-filename = uigetfile('*.mat','Select the NEURON file');
-load(filename);
+
 data = neuron.C;
 data_raw = neuron.C_raw;
 last_timeV = timeV(end);
@@ -111,9 +116,9 @@ end
 
 
 %% Figure
+        figure('Units','inch','Position',[1 1 10 5],'Visible','off');
 
 for z = 1: totalNeuronNum
-        figure('Units','inch','Position',[1 1 10 5],'Visible','off');
 
     % left = left + width+2+.2;
     % figure
@@ -147,7 +152,7 @@ for z = 1: totalNeuronNum
     
     xlabel('Time (s)')%,'FontSize',18)
     ylabel('\DeltaF');
-    title({['933 MED drinking Bout NeuronNum : ' num2str(z)]; ...
+    title({['714 MED drinking Bout NeuronNum : ' num2str(z)]; ...
         ['numLick = ' num2str(size(videoLickingEveryIdx,1)) '     numBout = ' num2str(numActualBout)];...
         ['Interval = ' num2str(boutWindow) 's'  '     Interlick =  >' num2str(numWindow) ' licks' ]},...
         'FontSize',10)
@@ -155,7 +160,8 @@ for z = 1: totalNeuronNum
 %         ['numLick = ' num2str(numLicking) '     numBout = ' num2str(numBout)];...
 %         ['Interval = ' num2str(timeWindow) 's'  '     Interlick =  >' num2str(numWindow) ' licks']},...
 %         'FontSize',10)
-    saveas(gcf,['933 MED drinking Bout RAW NeuronNum ' num2str(z) '.jpg'])
+    saveas(gcf,['714 MED drinking Bout RAW NeuronNum ' num2str(z) '.jpg'])
+    clf
 % pause
 % clf
 end
