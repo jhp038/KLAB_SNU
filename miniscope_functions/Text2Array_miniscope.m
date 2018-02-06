@@ -1,4 +1,4 @@
-%% Text2Array
+%% Text2Array_miniscope
 % Revised by Jong Hwi Park
 % 12/20/2016
 % This script function will find txt data files in curret working directory
@@ -14,7 +14,7 @@
 % Wav2.txt = LED pulse
 
 
-function [RawData] = Text2Array(folderName)
+function [RawData samplingRate] = Text2Array_miniscope(folderName)
 %% find current working directory and check if there is any txt files.
 % disp('Please select a directory that contains txt files...');
 % currentDirectory = uigetdir;
@@ -70,7 +70,7 @@ for i=1:size(dirInfo)
         RawData(:,1) = OrgData(:,1);
         length = size(RawData,2);
         RawData(:,length+1) = OrgData(:,2) ;
-%         samplingRate = Data(1,4);
+        samplingRate = Data(1,4);
         fclose(fidr);
     end
    
