@@ -4,7 +4,7 @@ fileNames = uipickfiles('REFilter','\.mat$|\.dat$|\.txt$');
 checkRawData = 0;
 frameRate = 5;
 %loading files
-nameString = '01202018 feeding 714'
+nameString = '01202018 feeding 933'
 for numFIles = 1:size(fileNames,2)
     [pathstr,name,ext] = fileparts(fileNames{1,numFIles}) ;
     switch ext
@@ -152,12 +152,12 @@ nonResponsiveCellNum=0;
 
 
 %% Figure
-for z = 1: totalNeuronNum
+for z = 52%: totalNeuronNum
     
     % left = left + width+2+.2;
     % figure
     %     timeV = linspace(0,last_timeV,size(data_raw,2));
-    f1 = figure('Units','inch','Position',[1 1 10 5],'Visible','off');
+    f1 = figure('Units','inch','Position',[1 1 10 5],'Visible','on');
 
     plot(timeV,data_raw(z,:));
     hold on
@@ -196,9 +196,9 @@ for z = 1: totalNeuronNum
         saveas(gcf,['714 MED feeding Bout RAW NeuronNum ' num2str(z) '.jpg'])
     %     clf
     % pause
-    close    
+%     close    
     %% first lick
-    %% Plotting mean first lick exam Range = -15 15
+    % Plotting mean first lick exam Range = -15 15
     
     %examRange = fpObj.examRange;
     examRange = [-15 15];
@@ -219,7 +219,7 @@ for z = 1: totalNeuronNum
     steFirstBout = std(firstBoutDffArray,0,1)/sqrt(size(firstBoutDffArray,1));
     %     figure('Units','inch','Position',[left bottom width height]);
     %     left = left + width+.2;
-    f2 = figure('Units','inch','Position',[1 1 5 4],'Visible','off');
+    f2 = figure('Units','inch','Position',[1 1 5 4],'Visible','on');
 
     mseb(firstBoutTimeV,meanFirstBout,steFirstBout);
     hold on
@@ -230,14 +230,233 @@ for z = 1: totalNeuronNum
     xlim(examRange);
 
     xlabel('Time (s)')%,'FontSize',18)
-    ylabel('\DeltaF/F (%)');
+    ylabel('\DeltaF');
     title(['714 MED feeding First Lick neuronNum ' num2str(z)],'FontSize',10)
     plot([0 0],ylim,'Color',[1 0 0]);
     plot([0 0],ylim,'Color',[1 0 0]);
-    saveas(gcf,['714 MED feeding firstLick NeuronNum ' num2str(z) '.jpg'])
-    close
+%     saveas(gcf,['714 MED feeding firstLick NeuronNum ' num2str(z) '.jpg'])
+%     close
+%% plot LastLick
+    %examRange = fpObj.examRange;
+    LastBoutRangeIdx =[videoLickingIdx(:,2) videoLickingIdx(:,2)] +repmat(examRangeIdx,[numActualBout 1]);
+    lastBoutDffArray = [];
+    for boutNum = 1:numActualBout
+        if LastBoutRangeIdx(boutNum,2) > numOfFrames || LastBoutRangeIdx(boutNum,1) >numOfFrames
+        else
+            lastBoutDffArray(boutNum,:) = dFF(LastBoutRangeIdx(boutNum,1):LastBoutRangeIdx(boutNum,2));
+            %                 firstBoutDffArray(boutNum,:) = [firstBoutDffArray;dFF(firstBoutRangeIdx(boutNum,1):firstBoutRangeIdx(boutNum,2))];
+        end
+    end
+    lastBoutTimeV = linspace(examRange(1),examRange(2),size(lastBoutDffArray,2));
+    meanFirstBout = mean(lastBoutDffArray,1);
+    steFirstBout = std(lastBoutDffArray,0,1)/sqrt(size(lastBoutDffArray,1));
+    %     figure('Units','inch','Position',[left bottom width height]);
+    %     left = left + width+.2;
+    f2 = figure('Units','inch','Position',[1 1 5 4],'Visible','on');
+
+    mseb(lastBoutTimeV,meanFirstBout,steFirstBout);
+    hold on
+    set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial')
+    set(gca, 'box', 'off')
+    set(gca,'TickDir','out');
+    set(gcf,'Color',[1 1 1])
+    xlim(examRange);
+
+    xlabel('Time (s)')%,'FontSize',18)
+    ylabel('\DeltaF');
+    title(['714 MED feeding Last Lick neuronNum ' num2str(z)],'FontSize',10)
+    plot([0 0],ylim,'Color',[1 0 0]);
+    plot([0 0],ylim,'Color',[1 0 0]);
+%     saveas(gcf,['714 MED feeding firstLick NeuronNum ' num2str(z) '.jpg'])
+%     close
+%% FirstLick Heatmap
+    fig2 = figure('visible','on')      ;
+    % fig2 = figure;
+    % title(titleString)
+    sub3 = subplot(2,2,3:4);
+    set(sub3,...
+        'Position',         [0.13 0.3 0.7 0.4])
+    imagesc(firstBoutTimeV,1:1:numActualBout,firstBoutDffArray);
+    hold on
+    
+    plot([0,0],ylim, 'LineStyle', '--', 'Color', [1 1 1], 'LineWidth', 2);
+    
+    h = gca;
+    cm = colormap(gca,'hot');
+    c2 = colorbar(...
+        'Location',         'eastoutside')
+    hL = ylabel(c2,'\DeltaF');
+    %     set(c2,'YTick',[-3 3]);
+    % c2.Label.String = 'n\DeltaF';
+    % set(hL,'Rotation',-90);
+    
+    % caxis([-3 3])
+    % h.YTick = 1:numMouse;
+    xlabel('Time (s)');
+    ylabel('Bout Num');
+    titleString =[nameString ' FirstLick neuron number ' num2str(z)];
+    title(titleString);
+    set(gca,...
+        'linewidth',           2.0,...
+        'FontSize',            11,...
+        'FontName',          'Arial',...
+        'TickDir',            'out',...
+        'box',               'off')
+    set(gcf,'Color',[1 1 1])
+
+    %% LastLick Heatmap
+    fig2 = figure('visible','on')      ;
+    % fig2 = figure;
+    % title(titleString)
+    sub3 = subplot(2,2,3:4);
+    set(sub3,...
+        'Position',         [0.13 0.3 0.7 0.4])
+    imagesc(firstBoutTimeV,1:1:numActualBout,lastBoutDffArray);
+    hold on
+    
+    plot([0,0],ylim, 'LineStyle', '--', 'Color', [1 1 1], 'LineWidth', 2);
+    
+    h = gca;
+    cm = colormap(gca,'hot');
+    c2 = colorbar(...
+        'Location',         'eastoutside')
+    hL = ylabel(c2,'\DeltaF');
+    %     set(c2,'YTick',[-3 3]);
+    % c2.Label.String = 'n\DeltaF';
+    % set(hL,'Rotation',-90);
+    
+    % caxis([-3 3])
+    % h.YTick = 1:numMouse;
+    xlabel('Time (s)');
+    ylabel('Bout Num');
+    titleString =[nameString ' LastLick neuron number ' num2str(z)];
+    title(titleString);
+    set(gca,...
+        'linewidth',           2.0,...
+        'FontSize',            11,...
+        'FontName',          'Arial',...
+        'TickDir',            'out',...
+        'box',               'off')
+    set(gcf,'Color',[1 1 1])
 end
-%% auROC analysis
+%% bar plots 
+%lets make this and functionalize it.
+videoLickingIdx
+numActualBout 
+
+dFF = dFF';
+meanBoutDff = [];
+hozconcatDff = [];
+hozconcat_nonDff = [];
+
+    for boutNum = 1:numActualBout
+        meanBoutDff(boutNum,1) = mean(dFF(videoLickingIdx(boutNum,1):videoLickingIdx(boutNum,2)));
+        maxBoutDff(boutNum,1) = max(dFF(videoLickingIdx(boutNum,1):videoLickingIdx(boutNum,2)));
+
+        steBoutDff(boutNum,1) = std(dFF(videoLickingIdx(boutNum,1):videoLickingIdx(boutNum,2)),0,1)/length(dFF(videoLickingIdx(boutNum,1):videoLickingIdx(boutNum,2)));
+        hozconcatDff = [hozconcatDff dFF(videoLickingIdx(boutNum,1):videoLickingIdx(boutNum,2))'];
+        hozconcat_nonDff = (sum(dFF) - sum(hozconcatDff)) / (size(dFF,1) - size(hozconcatDff,2));
+    end
+    
+    
+      
+    meanDff = mean(hozconcatDff);
+    meanNonDff = mean(hozconcat_nonDff);
+    %store meanDff and meanNonDff
+%     
+%     meanDffStack = [meanDffStack; meanDff];
+%     meanNonDffStack = [meanNonDffStack;meanNonDff];
+%     
+    figure('visible','on');
+    boutBar = bar(1,meanDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 1]);
+    hold on
+    nonBoutBar = bar(2,meanNonDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 0]);
+    
+    %Xlabel
+    set(gca,'xtick',[])
+    Labels = {'Bout', 'NonBout'};
+    set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
+    %Ylabel
+    ylabel('\DeltaF/F (%)');
+    %ylim,other stuff
+    set(gcf,'Color',[1 1 1])
+    set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial')
+    set(gca,'box','off')
+    set(gca,'TickDir','out');
+    %% Linear Regression (MEAN)
+    x = 1:numActualBout;
+    y = meanBoutDff';
+%     y = maxBoutDff';
+    % get regression coefficient
+    p = polyfit(x,y,1);
+    yfit = polyval(p,x);
+    yresid = y - yfit;
+    
+    SSresid = sum(yresid.^2);
+    SStotal = (length(y)-1) * var(y);
+    rsq = 1 - SSresid/SStotal;
+    r = round(corrcoef(x,y),2);%pearson cor
+    
+    %standard error
+    
+    
+    %plot
+    figure('visible','on');
+    plot(x,y,'.','MarkerSize',20,'Color','k')
+    hold on
+    
+    plot(x,yfit,'lineWidth',2);
+    %graph spec
+    xlim([.5 numActualBout+.5])
+    xlabel('Bout Number');
+    ylabel('\DeltaF');
+    
+    set(gcf,'Color',[1 1 1])
+    set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial','box','off')
+    set(gca,'TickDir','out');
+    dim = [.7 .5 .3 .4];
+    str = ['pearson cor = ' num2str(r(1,2))];
+    annotation('textbox',dim,'String',str,'FitBoxToText','on');
+    title('MEAN')
+
+       %% Linear Regression (MAX)
+    x = 1:numActualBout;
+%     y = meanBoutDff';
+    y = maxBoutDff';
+    % get regression coefficient
+    p = polyfit(x,y,1);
+    yfit = polyval(p,x);
+    yresid = y - yfit;
+    
+    SSresid = sum(yresid.^2);
+    SStotal = (length(y)-1) * var(y);
+    rsq = 1 - SSresid/SStotal;
+    r = round(corrcoef(x,y),2);%pearson cor
+    
+    %standard error
+    
+    
+    %plot
+    figure('visible','on');
+    plot(x,y,'.','MarkerSize',20,'Color','k')
+    hold on
+    
+    plot(x,yfit,'lineWidth',2);
+    %graph spec
+    xlim([.5 numActualBout+.5])
+    xlabel('Bout Number');
+    ylabel('\DeltaF');
+    
+    set(gcf,'Color',[1 1 1])
+    set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial','box','off')
+    set(gca,'TickDir','out');
+    dim = [.7 .5 .3 .4];
+    str = ['pearson cor = ' num2str(r(1,2))];
+    annotation('textbox',dim,'String',str,'FitBoxToText','on');
+        title('MAX')
+
+%% permutation test
+firstBoutRangeIdx =[videoLickingIdx(:,1) videoLickingIdx(:,1)] +repmat(examRangeIdx,[numActualBout 1]);
 cellClassification = [];
 activatedCellNum = 0;
 inhibitiedCellNum = 0;
@@ -278,9 +497,12 @@ for z = 1: totalNeuronNum
     %     legend('baseline','feeding')
     diff_data = meanShock-meanBaseline ;
     mu = mean(meanBaseline);
-    [pval, t_orig, crit_t, est_alpha, seed_state]=mult_comp_perm_t1([diff_data],5000,1,0.05,0,0);
+    %function [pval, t_orig, crit_t, est_alpha, seed_state]=mult_comp_perm_t1(data,n_perm,tail,alpha_level,mu,reports,seed_state)
+
+    [pval, t_orig, crit_t, est_alpha, seed_state]=mult_comp_perm_t1([meanShock meanBaseline],5000,0,0.05,mean(meanBaseline),0);
     disp(pval)
     %     pval(z) = permtest(meanShock,meanBaseline,5000);
+    pval = pval(1);
     if pval<= 0.05 %excited
         
         activatedCellNum = activatedCellNum + 1;
