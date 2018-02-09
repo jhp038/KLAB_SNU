@@ -1,7 +1,6 @@
 %% Miniscope MED analysis main function
 clear all; close all
-path ='I:\Miniscope data\1_20_2018\714_feeding'
-cd(path);
+
 
 %% load data
 msObj = msObjMake;
@@ -18,4 +17,4 @@ msObj = msCalculateBout(msObj);
 
 %% plotting
 %visualizing each neuron
-plotmsBout(msObj);
+plotmsBout(msObj,'n');

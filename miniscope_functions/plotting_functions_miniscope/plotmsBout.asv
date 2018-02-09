@@ -25,7 +25,7 @@ boutWindow =msObj.boutData.bout_criteria.boutWindow;
 numWindow = msObj.boutData.bout_criteria.numWindow;
 %%
 
-f1 = figure('Units','inch','Position',[.5 .5 19 8],'Visible','on');
+f1 = figure('Units','inch','Position',[.5 .5 17 8],'Visible','on');
 
 for neuronNum = 1%: numTotalNeuron
     
@@ -199,7 +199,7 @@ for neuronNum = 1%: numTotalNeuron
     
     
     meanDff = mean(meanBoutDff);
-    steDff = std(meanBoutDff,0,1)./sqrt(size(meanBoutDff,1));
+    steDff = std(meanDff,0,1)
     meanNonDff = mean(hozconcat_nonDff);
     %store meanDff and meanNonDff
     %
@@ -211,7 +211,7 @@ for neuronNum = 1%: numTotalNeuron
     boutBar = bar(1,meanDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 1]);
     hold on
     nonBoutBar = bar(2,meanNonDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 0]);
-    errorbar(1,meanDff,steDff,'Color','k','LineWidth',1.5)
+    errorbar(1,meanDff,steBoutDff)
 
     %Xlabel
     set(gca,'xtick',[])
@@ -252,13 +252,13 @@ for neuronNum = 1%: numTotalNeuron
     %graph spec
     xlim([.5 numTotalBout+.5])
     xlabel('Bout Number');
-    ylabel('mean \DeltaF');
+    ylabel('\DeltaF');
     
     set(gcf,'Color',[1 1 1])
     set(gca,'linewidth',1.6,'FontSize',11,'FontName','Arial','box','off')
     set(gca,'TickDir','out');
 %     dim = [.7 .5 .3 .4];
-    str = ['Pearson cor = ' num2str(r(1,2))];
+    str = ['                                               pearson cor = ' num2str(r(1,2))];
     
     title(str,'FontSize',8)
     %% save this graph
