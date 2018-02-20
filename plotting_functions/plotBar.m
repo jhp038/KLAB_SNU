@@ -2,14 +2,14 @@ function plotBar(fpObj,inspectRange,saveFigures)
 %initialization
 totalMouseNum = fpObj.totalMouseNum;
 %check directory and make dir if does not exists
-if exist('BarGraph') ~= 7
-    [status, msg, msgID] = mkdir('BarGraph');
-    if status == 1
-        cd('BarGraph');
-    end
-else
-    cd('BarGraph');
-end
+% if exist('BarGraph') ~= 7
+%     [status, msg, msgID] = mkdir('BarGraph');
+%     if status == 1
+%         cd('BarGraph');
+%     end
+% else
+%     cd('BarGraph');
+% end
 meanDffStack = [];
 meanNonDffStack = [];
 examRange = fpObj.examRange;
@@ -18,6 +18,7 @@ samplingRate = round(fpObj.samplingRate);
 
 for numMouse = 1:totalMouseNum
     %% bar graph
+    f1 = figure('Units','inch','Position',[1 1 8 8],'Visible','on');
     %initialize for each mouse
     boutIdx = fpObj.idvData(numMouse).boutIdx;
     totalNumBout = fpObj.idvData(numMouse).totalNumBout;
@@ -39,7 +40,7 @@ for numMouse = 1:totalMouseNum
     meanDffStack = [meanDffStack; meanDff];
     meanNonDffStack = [meanNonDffStack;meanNonDff];
     
-    figure('visible','off');
+    subplot(2,2,1)
     boutBar = bar(1,meanDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 1]);
     hold on
     nonBoutBar = bar(2,meanNonDff,'EdgeColor',[0 0 0],'FaceColor',[0 0 0]);
@@ -59,16 +60,16 @@ for numMouse = 1:totalMouseNum
     
     title([fpObj.idvData(numMouse).Description '  bar'],'FontSize',6)
     
-    if saveFigures =='y' || saveFigures =='Y'
-        saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.jpg'])
-        saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.svg'])
-    end
+%     if saveFigures =='y' || saveFigures =='Y'
+%         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.jpg'])
+%         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.svg'])
+%     end
     %     export_fig([fpObj.idvData(numMouse).Description ' bar'],'-eps','-jpg')
     
     
     %%
     
-    figure('visible','off');
+    subplot(2,2,2)
     hold on
     bar(meanBoutDff)
     xlabel('Bout Number');
@@ -83,10 +84,10 @@ for numMouse = 1:totalMouseNum
         ['numBout = ' num2str(totalNumBout)]}, 'FontSize',6)
     hold off
     %     export_fig([fpObj.idvData(numMouse).Description ' bout bar'],'-eps','-jpg')
-    if saveFigures =='y' || saveFigures =='Y'
-        saveas(gcf,[fpObj.idvData(numMouse).Description ' bout bar.jpg'])
-        saveas(gcf,[fpObj.idvData(numMouse).Description ' bout bar.svg'])
-    end
+%     if saveFigures =='y' || saveFigures =='Y'
+%         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout bar.jpg'])
+%         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout bar.svg'])
+%     end
     %% Linear Regression
     x = 1:totalNumBout;
     y = meanBoutDff';
@@ -104,7 +105,7 @@ for numMouse = 1:totalMouseNum
     
     
     %plot
-    figure('visible','off');
+    subplot(2,2,3)
     plot(x,y,'o')
     hold on
     
@@ -117,17 +118,18 @@ for numMouse = 1:totalMouseNum
     set(gcf,'Color',[1 1 1])
     set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial','box','off')
     set(gca,'TickDir','out');
-    dim = [.7 .5 .3 .4];
+%     dim = [.7 .5 .3 .4];
     str = ['pearson cor = ' num2str(r(1,2))];
-    annotation('textbox',dim,'String',str,'FitBoxToText','on');
+%     annotation('textbox',dim,'String',str,'FitBoxToText','on');
     
     title({[fpObj.idvData(numMouse).Description ' correlation'];...
-        ['numBout = ' num2str(totalNumBout)]}, 'FontSize',6)
+        ['numBout = ' num2str(totalNumBout)];...
+        [str]}, 'FontSize',6)
     %     export_fig([fpObj.idvData(numMouse).Description ' bout correlation'],'-eps','-jpg')
-    if saveFigures =='y' || saveFigures =='Y'
-        saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.jpg'])
-        saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.svg'])
-    end
+%     if saveFigures =='y' || saveFigures =='Y'
+%         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.jpg'])
+%         saveas(gcf,[fpObj.idvData(numMouse).Description ' bout correlation.svg'])
+%     end
     %% inspect range bar graph
     
     %initialize
@@ -157,7 +159,7 @@ for numMouse = 1:totalMouseNum
     
     
     
-    figure('visible','off');
+    subplot(2,2,4)
 
     hold on
     
@@ -177,7 +179,7 @@ for numMouse = 1:totalMouseNum
     set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial')
     
     title({[fpObj.idvData(numMouse).Description ' Before vs After Lick'];...
-        ['Range = ' num2str(inspectRange) ' sec']}, 'FontSize',10)
+        ['Range = ' num2str(inspectRange) ' sec']}, 'FontSize',6)
     
     set(gca,'box','off')
     set(gca,'TickDir','out'); % The only other option is 'in'
@@ -186,8 +188,10 @@ for numMouse = 1:totalMouseNum
     
     %     export_fig([fpObj.idvData(numMouse).Description ' before vs after Lick'],'-eps','-jpg')
     if saveFigures =='y' || saveFigures =='Y'
-        saveas(gcf,[fpObj.idvData(numMouse).Description '  before vs after Lick.jpg'])
-        saveas(gcf,[fpObj.idvData(numMouse).Description '  before vs after Lick.svg'])
+
+            print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' barGraphs.svg'])
+            print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' barGraphs.pdf'])
+
     end
 end
 %% total mean
@@ -196,14 +200,17 @@ ste_mOmDff = std(meanDffStack)/sqrt(totalMouseNum);
 mOmNoneDff = mean(meanNonDffStack);
 ste_mOmNoneDff = std(meanNonDffStack)/sqrt(totalMouseNum);
 %
-figure('visible','off');
+figure('visible','on');
 hold on
 b_1 = bar(1,mOmDff,'FaceColor',[1 1 1],'LineWidth',1.6);
 b_2 = bar(2,mOmNoneDff,'FaceColor',[1 1 1],'LineWidth',1.6);
 errorbar(1:2,[mOmDff mOmNoneDff],[ste_mOmDff ste_mOmNoneDff],'.','Color','k','linewidth',1.3)
+ylim([-1 7]);
 
 % hold on
 % h2 = barwitherr(ste_mOmNoneDff, mOmNoneDff)
+p = ranksum(meanDffStack,meanNonDffStack)
+sigstar([1,2],p)
 
 set(gca,'xtick',[])
 Labels = {'Bout', 'NonBout'};
@@ -219,11 +226,12 @@ set(gca,'linewidth',1.6,'FontSize',13,'FontName','Arial')
 set(gca,'box','off')
 set(gca,'TickDir','out'); % The only other option is 'in'
 
+
+
 % export_fig([fpObj.idvData(numMouse).Description ' meanOfmean'],'-eps','-jpg')
-if saveFigures =='y' || saveFigures =='Y'
-    
-    saveas(gcf,[fpObj.idvData(numMouse).Description ' meanOfmean.jpg'])
-    saveas(gcf,[fpObj.idvData(numMouse).Description ' meanOfmean.svg'])
+if saveFigures =='y' || saveFigures =='Y' 
+    print(gcf, '-painters', '-depsc', ['boutVSnonBout.svg'])
+    print(gcf, '-painters', '-depsc', ['boutVSnonBout.pdf'])
 end
 %%  mean of mean of mean  
 
@@ -243,6 +251,9 @@ hold on
 b_1 = bar(1,mOmOmBeforeLickDff,'FaceColor',[0 .6 .6],'LineWidth',1.6);
 b_2 = bar(2,mOmOmAfterLickDff,'FaceColor',[0 0.2 0.2],'LineWidth',1.6);
 errorbar(1:2,[mOmOmBeforeLickDff mOmOmAfterLickDff],[ste_mOmOmBeforeLickDff ste_mOmOmAfterLickDff],'.','Color','k','linewidth',1.3)
+p = ranksum(mOmBeforeLickDff',mOmAfterLickDff');
+sigstar([1,2],p)
+
 set(gca,'xtick',[])
 Labels = {'Before Lick', 'After Lick'};
 set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
@@ -263,13 +274,13 @@ set(gca,'TickDir','out'); % The only other option is 'in'
 
 
 
-%     export_fig([fpObj.idvData(numMouse).Description ' before vs after Lick'],'-eps','-jpg')
-if saveFigures =='y' || saveFigures =='Y'
-    saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.jpg'])
-    saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.svg'])
-end
+% %     export_fig([fpObj.idvData(numMouse).Description ' before vs after Lick'],'-eps','-jpg')
+% if saveFigures =='y' || saveFigures =='Y'
+%     saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.jpg'])
+%     saveas(gcf,[fpObj.groupInfo{1,1} '  before vs after Lick mOmOm.svg'])
+% end
 
 %%
-cd ..
+% cd ..
 
 end

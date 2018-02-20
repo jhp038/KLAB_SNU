@@ -24,15 +24,15 @@ fpObj = calculatedFF_choice(fpObj);
 timeWindow = 3; %sec
 numWindow = 3; %number of licks
 normalizeWindow = 3; %normalize window in sec
-manualExamRange = [-20 15]; %in sec
+manualExamRange = [-15 30]; %in sec
 fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange);
 
 %% Visualization
-plotBout(fpObj,'N');
-plotBoutInfo(fpObj,5,'Y');
-plotLick(fpObj,manualExamRange,'Y');
+plotBout(fpObj,manualExamRange,'Y');
+% plotBoutInfo(fpObj,5,'N');
+% plotLick(fpObj,manualExamRange,'N');
 
-inspectRange = [-20 15];
+inspectRange = [-5 15];
 plotBar(fpObj,inspectRange,'Y');
 
 % plotEachBout(fpObj,[-5 15],'Y');

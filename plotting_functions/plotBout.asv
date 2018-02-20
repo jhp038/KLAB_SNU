@@ -36,7 +36,6 @@ for numMouse = 1:totalMouseNum
     
     
     plot(timeV,dFF,'Color','k')
-
     hold on
     xlim([timeV(1) timeV(end)]);
     yRange = ylim;
@@ -56,6 +55,7 @@ for numMouse = 1:totalMouseNum
         set(r, 'FaceAlpha', 0.2,'LineStyle','none');
         uistack(r,'up')
     end
+    
     
     % setting font size, title
     set(gcf,'renderer','Painters')
@@ -307,7 +307,7 @@ for i = 1:4
     ylabel(ylabelString);
     
     title(titleString,'FontSize',8)
-    ylim([-1 7])
+    ylim([-3 5])
     plot([0 0],ylim,'Color',[1 0 0]);
     plot([0 0],ylim,'Color',[1 0 0]);
     set(gca,'TickDir','out'); % The only other option is 'in'

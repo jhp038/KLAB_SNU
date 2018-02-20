@@ -1,8 +1,8 @@
 function fpObj = getVideoOnOffIdx(fpObj)
 
 totalMouseNum = fpObj.totalMouseNum;
-% videoFile = uipickfiles('FilterSpec','*.mp4'); %this has to search for .mp4 files
-videoFile = uipickfiles('FilterSpec','*.wmv'); %this has to search for .wmv files
+videoFile = uipickfiles('FilterSpec','*.mp4'); %this has to search for .mp4 files
+% videoFile = uipickfiles('FilterSpec','*.wmv'); %this has to search for .wmv files
 
 if iscell(videoFile) == 0
     errordlg('Please select .mp4 files')

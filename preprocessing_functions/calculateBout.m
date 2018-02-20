@@ -9,8 +9,7 @@ switch dFFChoice
     case '473n405'
         for numMouse = 1:totalMouseNum
             %initialization
-%             disp([num2str(numMouse)]);
-disp(['NumMouse: ' num2str(numMouse)])
+            disp(['NumMouse: ' num2str(numMouse)])
             boutWindow = timeWindow;
             window = round(boutWindow *fpObj.samplingRate);
             lickingIdx = fpObj.idvData(numMouse).TTLOnIdx{1,1};
@@ -31,7 +30,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             %adding last row EDITED 9/25
             on_off_Idx(size(on_off_Idx,1)+1,:) = [on_off_Idx(end,2)+1 size(lickingIdx,1)];
             numPossibleBout = numPossibleBout +1;
-
+            
             %% Second Threshold -> numWindow or more licks in each interval
             for i = 1:numPossibleBout
                 if (on_off_Idx(i,2) - on_off_Idx(i,1)) <= numWindow % changed criteria
@@ -47,12 +46,11 @@ disp(['NumMouse: ' num2str(numMouse)])
             boutIdx(:,1) = lickingIdx(on_off_Idx(:,1));
             boutIdx(:,2) = lickingIdx(on_off_Idx(:,2));
             dFF = fpObj.idvData(numMouse).dFF;
-            timeV = fpObj.idvData(numMouse).timeVectors;
             
             
             %% Calculating mean first lick exam Range
             
-%             examRange = [-timeWindow timeWindow];
+            %             examRange = [-timeWindow timeWindow];
             examRange = manualExamRange;
             examRangeIdx = examRange * round(fpObj.samplingRate);
             firstBoutRangeIdx = repmat(boutIdx(:,1),[1 2]) +repmat(examRangeIdx,[numActualBout 1]);
@@ -66,7 +64,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             
             firstBoutDffArray = [];
             for boutNum = 1:numActualBout
-%                 disp(num2str(boutNum));
+                %                 disp(num2str(boutNum));
                 firstBoutDffArray = [firstBoutDffArray;dFF(firstBoutRangeIdx(boutNum,1):firstBoutRangeIdx(boutNum,2))'];
             end
             firstBoutTimeV = linspace(examRange(1),examRange(2),size(firstBoutDffArray,2));
@@ -87,7 +85,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             
             %% Calculating mean last lick exam Range
             lastBoutRangeIdx = repmat(boutIdx(:,2),[1 2]) +repmat(examRangeIdx,[numActualBout 1]);
-
+            
             lastBoutDffArray = [];
             for boutNum = 1:numActualBout
                 lastBoutDffArray = [lastBoutDffArray;dFF(lastBoutRangeIdx(boutNum,1):lastBoutRangeIdx(boutNum,2))'];
@@ -97,16 +95,17 @@ disp(['NumMouse: ' num2str(numMouse)])
             steLastBout = std(lastBoutDffArray,0,1)/sqrt(size(lastBoutDffArray,1));
             
             % Calculating mean first lick exam Range NORMALIZED
-%             eachMeanArray_last = mean(lastBoutDffArray(:,1:normalizeWindow*round(fpObj.samplingRate)),2);
-%             eachSTDArray_last = std(lastBoutDffArray(:,1:normalizeWindow*round(fpObj.samplingRate)),0,2);
+            %             eachMeanArray_last = mean(lastBoutDffArray(:,1:normalizeWindow*round(fpObj.samplingRate)),2);
+            %             eachSTDArray_last = std(lastBoutDffArray(:,1:normalizeWindow*round(fpObj.samplingRate)),0,2);
             
             
             eachMeanArray_last = mean(lastBoutDffArray(:,(abs(examRangeIdx(1)) - normalizeWindow*round(fpObj.samplingRate)):abs(examRangeIdx(1))-1),2);
             eachSTDArray_last = std(lastBoutDffArray(:,(abs(examRangeIdx(1)) - normalizeWindow*round(fpObj.samplingRate)):abs(examRangeIdx(1))-1),0,2);
             
-            eachNormArray_last = (lastBoutDffArray - repmat(eachMeanArray_last,1,size(lastBoutDffArray,2)))./repmat(eachSTDArray_last,[1 size(meanLastBout,2)]);       ;
+            %             eachNormArray_last = (lastBoutDffArray - repmat(eachMeanArray_last,1,size(lastBoutDffArray,2)))./repmat(eachSTDArray_last,[1 size(meanLastBout,2)]);       ;
+            eachNormArray_last = (lastBoutDffArray - repmat(eachMeanArray,1,size(lastBoutDffArray,2)))./repmat(eachSTDArray,[1 size(meanLastBout,2)]);       ;
             
- 
+            
             meanNormLastBout = mean(eachNormArray_last,1);
             steNormLastBout = std(eachNormArray_last,0,1)/sqrt(size(eachNormArray_last,1));
             
@@ -144,7 +143,8 @@ disp(['NumMouse: ' num2str(numMouse)])
             
             fpObj.idvData(numMouse).meanNormLastBout = meanNormLastBout;
             fpObj.idvData(numMouse).steNormLastBout = steNormLastBout;
-                
+            
+%             fpObj.idvData(numMouse).timeV = 
             
         end
         
@@ -187,7 +187,6 @@ disp(['NumMouse: ' num2str(numMouse)])
             boutIdx(:,1) = lickingIdx(on_off_Idx(:,1));
             boutIdx(:,2) = lickingIdx(on_off_Idx(:,2));
             raw473 = fpObj.idvData(numMouse).raw473;
-            timeV = fpObj.idvData(numMouse).timeVectors;
             
             
             %% Calculating mean first lick exam Range
@@ -206,7 +205,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             medianArray = [];
             for boutNum = 1:numActualBout
                 medianArray = [medianArray;median(raw473(firstBoutRangeIdx(boutNum,1):firstBoutRangeIdx(boutNum,1)+window))];
-            end            
+            end
             
             firstBoutDffArray = [];
             for boutNum = 1:numActualBout
@@ -232,10 +231,10 @@ disp(['NumMouse: ' num2str(numMouse)])
             lastBoutRangeIdx = boutIdx(:,2) +examRangeIdx;
             
             lastBoutDffArray = [];
-%             for boutNum = 1:numActualBout
-%                 lastBoutDffArray = [lastBoutDffArray;dFF(lastBoutRangeIdx(boutNum,1):lastBoutRangeIdx(boutNum,2))'];
-%             end
-%             
+            %             for boutNum = 1:numActualBout
+            %                 lastBoutDffArray = [lastBoutDffArray;dFF(lastBoutRangeIdx(boutNum,1):lastBoutRangeIdx(boutNum,2))'];
+            %             end
+            %
             for boutNum = 1:numActualBout
                 lastBoutDffArray = [lastBoutDffArray;...
                     ((raw473(lastBoutRangeIdx(boutNum,1):lastBoutRangeIdx(boutNum,2))-medianArray(boutNum))'./medianArray(boutNum))*100];
@@ -252,7 +251,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             meanNormLastBout = mean(eachNormArray_last,1);
             steNormLastBout = std(eachNormArray_last,0,1)/sqrt(size(eachNormArray_last,1));
             
-
+            
             
             
             %% output to fpObj.idvData
@@ -280,7 +279,7 @@ disp(['NumMouse: ' num2str(numMouse)])
             fpObj.idvData(numMouse).meanNormLastBout = meanNormLastBout;
             fpObj.idvData(numMouse).steNormLastBout = steNormLastBout;
             
-
+            
         end
         
 end

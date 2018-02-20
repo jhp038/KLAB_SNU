@@ -23,7 +23,7 @@ dffMLBn = [];
 for numMouse = 1:totalMouseNum
     %% Plotting mean first lick exam Range
     
-    figure('Units','inch','Position',[left bottom width height],'visible','off');
+    figure('Units','inch','Position',[left bottom width height],'visible','on');
     left = left + width+.2;
     mseb(timeV,fpObj.idvData(numMouse).meanFirstBout,fpObj.idvData(numMouse).steFirstBout);
     hold on
@@ -44,12 +44,11 @@ for numMouse = 1:totalMouseNum
     xlim([examRange(1) examRange(2)])
     %     export_fig([fpObj.idvData(numMouse).Description ' First Lick'],'-eps','-jpg')
     if saveFigures =='y' || saveFigures =='Y'
-        
         saveas(gcf,[fpObj.idvData(numMouse).Description ' First Lick' '.jpg'])
         saveas(gcf,[fpObj.idvData(numMouse).Description ' First Lick' '.svg'])
     end
     %% Plotting mean first lick exam Range NORMALIZED
-    figure('Units','inch','Position',[left bottom width height],'visible','off');
+    figure('Units','inch','Position',[left bottom width height],'visible','on');
     
     mseb(timeV,fpObj.idvData(numMouse).meanNormFirstBout,fpObj.idvData(numMouse).steNormFirstBout);
     hold on
@@ -106,7 +105,7 @@ for numMouse = 1:totalMouseNum
     
     
     %% Plotting mean last lick exam Range NORMALIZED
-    figure('Units','inch','Position',[left bottom width height],'visible','off');
+    figure('Units','inch','Position',[left bottom width height],'visible','on');
     
     mseb(timeV,fpObj.idvData(numMouse).meanNormLastBout,fpObj.idvData(numMouse).steNormLastBout);
     hold on

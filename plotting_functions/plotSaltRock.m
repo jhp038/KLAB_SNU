@@ -1,5 +1,5 @@
 %% Processing Video data
-function fpObj = plotVIdeoBout(fpObj)
+function fpObj = plotSaltRock(fpObj)
 fpObj = getVideoOnOffIdx(fpObj);
 %initialize video data
 LEDOnIdx = fpObj.idvData(1).LEDOnIdx;

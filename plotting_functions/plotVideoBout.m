@@ -1,9 +1,11 @@
 %% Processing Video data
-function fpObj = plotVIdeoBout(fpObj)
-fpObj = getVideoOnOffIdx(fpObj);
+function fpObj = plotVideoBout(fpObj)
+% fpObj = getVideoOnOffIdx(fpObj);
 %initialize video data
 LEDOnIdx = fpObj.idvData(1).LEDOnIdx;
-[FileName,PathName] = uigetfile('*.mat','Select the MATLAB data file');
+% [FileName,PathName] = uigetfile('*.mat','Select the MATLAB data file');
+[FileName] = uipickfiles('FilterSpec','*.mat'); %this has to search for .xlsx files
+
 loaded_frame = load([PathName '\' FileName]);
 % time = time.ans./30;
 %Just for SR's data...

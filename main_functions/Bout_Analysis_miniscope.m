@@ -1,7 +1,6 @@
 %% Miniscope MED analysis main function
 clear all; close all
 
-
 %% load data
 msObj = msObjMake;
 
@@ -17,4 +16,5 @@ msObj = msCalculateBout(msObj);
 
 %% plotting
 %visualizing each neuron
-plotmsBout(msObj,'n');
+plotmsBout(msObj,'y');
+plotKmeansClustering_bout(msObj,[-15 15],7,1000000);
