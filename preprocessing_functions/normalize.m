@@ -1,17 +1,21 @@
 function fpObj = normalize(fpObj)
-%%
-    %% Initialization
-    totalMouseNum = fpObj(fpObjNum).totalMouseNum;
-    totalWaveNum = fpObj(fpObjNum).waveNum;
-    examRange = fpObj(fpObjNum).examRange;
-    group_trialArray = [];
-    group_trialArray_norm = [];
-    group_TA_mean = [];
-    group_TA_std = [];
-    concatMeanArray = [];
-    concatNorm_MeanArray = [];
+
+%% Initialization
+totalfpObjNum = size(fpObj,2);
+for fpObjNum = 1:totalfpObjNum
+
+totalMouseNum = fpObj(fpObjNum).totalMouseNum;
+totalWaveNum = fpObj(fpObjNum).waveNum;
+examRange = fpObj(fpObjNum).examRange;
+group_trialArray = [];
+group_trialArray_norm = [];
+group_TA_mean = [];
+group_TA_std = [];
+concatMeanArray = [];
+concatNorm_MeanArray = [];
+
+%% grouping individual data into a struct, groupData.tiral_dFF
     
-    %% grouping individual data into a struct, groupData.tiral_dFF
     for mouseNum = 1:totalMouseNum
         for waveNum = 1:totalWaveNum
             group_trialArray = [group_trialArray ;fpObj(fpObjNum).idvData(mouseNum).trialArray];
@@ -48,10 +52,11 @@ function fpObj = normalize(fpObj)
     end
     
     %% saving concat Raw and Norm array. Also calculate mean and ste
-
+    
     fpObj(fpObjNum).meanRawArray = mean(concatMeanArray,1);
     fpObj(fpObjNum).meanNormArray = mean(concatNorm_MeanArray,1);
     fpObj(fpObjNum).steRawArray = std(concatMeanArray,0,1)/sqrt(size(concatMeanArray,1));
     fpObj(fpObjNum).steNormArray = std(concatNorm_MeanArray,0,1)/sqrt(size(concatNorm_MeanArray,1));
     
+end
 end

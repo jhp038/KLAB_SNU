@@ -21,8 +21,8 @@ fpObj = calculatedFF_choice(fpObj);
 
 %%
 % parameter initialization .. 
-timeWindow = 3; %sec
-numWindow = 3; %number of licks
+timeWindow = 2; %sec
+numWindow = 2; %number of licks
 normalizeWindow = 3; %normalize window in sec
 manualExamRange = [-15 30]; %in sec
 fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange);

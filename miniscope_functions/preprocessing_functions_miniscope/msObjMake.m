@@ -1,4 +1,5 @@
 function msObj = msObjMake
+%you have to specify 
 
 fileNames = uipickfiles('REFilter','\.mat$|\.dat$|\.txt$|\.xlsx$');
 checkRawData = 0;

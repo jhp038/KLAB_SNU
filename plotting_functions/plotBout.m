@@ -39,7 +39,7 @@ for numMouse = 1:totalMouseNum
 
     hold on
     xlim([timeV(1) timeV(end)]);
-    yRange = ylim;
+    yRange = [-3 10];
     xRange = xlim;
     ylim([yRange(1),yRange(2)]);
     
@@ -307,7 +307,7 @@ for i = 1:4
     ylabel(ylabelString);
     
     title(titleString,'FontSize',8)
-    ylim([-1 7])
+    ylim([-2 6])
     plot([0 0],ylim,'Color',[1 0 0]);
     plot([0 0],ylim,'Color',[1 0 0]);
     set(gca,'TickDir','out'); % The only other option is 'in'

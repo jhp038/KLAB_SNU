@@ -1,5 +1,5 @@
 function plotmsBout(msObj,saveFigures)
-%% idealistically, this function will SUBPLOT all necessary figures.
+%% ideally, this function will SUBPLOT all necessary figures.
 %   Current plan:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                full bout%                    firstlickheatmap   firslickgraph

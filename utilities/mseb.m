@@ -146,7 +146,7 @@ holdStatus=ishold;
 if ~holdStatus, hold on,  end
 
 for c = C:-1:1
-    %% Plotting patches
+    %% Plotting patches 
     % Plot the main line. We plot this first in order to extract the RGB values
     % for the line colour. I am not aware of a function that does this.
     H(c).mainLine=plot(x(c,:),y(c,:),'color',lineProps.col{c});

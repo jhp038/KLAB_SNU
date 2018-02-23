@@ -22,7 +22,7 @@ normalized_C = (C_raw - mean_Array)./std_Array;
 f1 = figure('Units','inch','Position',[1 1 14 8],'Visible','on');
 % set(gcf, 'Renderer', 'painters');
 
-for neuronNum = 39%1: numTotalNeuron
+for neuronNum = 1: numTotalNeuron
     %% Full plot
     subplot(2,3,1:3)
     plot(timeStamp,normalized_C(neuronNum,:));
@@ -179,7 +179,7 @@ for neuronNum = 39%1: numTotalNeuron
     else
         %         pause
     end
-%     clf
+    clf
 end
 %%
 cellClassification = [];
@@ -256,10 +256,179 @@ h1(6).Position = 0.5*h1(6).Position;
 title('Permutation Test')
 set(gcf,'Color',[1 1 1])
 legend({'Shock-activated';'Shock-inhibited';'non-responsive'},'Location','southeastoutside','Orientation','vertical')
-if saveFigures == 'y' || saveFigures == 'Y'  
+% if saveFigures == 'y' || saveFigures == 'Y'  
     export_fig(gcf,'permTest Pie Plot.pdf', '-depsc', '-painters');
+% end
+%% classified cell heatmap
+examRange = [-5 5];
+neuron = msObj.msData.neuron;
+data_raw = neuron.C_raw;
+numOfFrames = msObj.msData.numOfFrames;
+numTotalNeuron = msObj.msData.numTotalNeuron;
+checkBoutData = isfield(msObj,'boutData');
+if checkBoutData ==1
+    videoEventIdx=msObj.boutData.videoLickingIdx;
+    numEvent=msObj.boutData.numTotalBout;
+else
+    videoEventIdx = msObj.videoShockIdx;
+    numEvent = msObj.numTotalShock;
 end
-%%
+examRangeIdx = examRange*5;
+totalExamRangeIdx = examRangeIdx(2) - examRangeIdx(1) +1;
+timeV = linspace(examRange(1),examRange(2),totalExamRangeIdx);
+examRangeSize = size(timeV,2);
+
+data_raw_max = max(data_raw,[],2);
+data_raw_min = min(data_raw,[],2);
+
+max_data_raw_array = repmat(data_raw_max,[1,numOfFrames]);
+min_data_raw_array = repmat(data_raw_min,[1,numOfFrames]);
+
+data_norm =((data_raw - min_data_raw_array)./(max_data_raw_array-min_data_raw_array)-.5)*2;
+
+for neuronNum = 1: numTotalNeuron
+    idx = [videoEventIdx(:,1) videoEventIdx(:,1)] + repmat(examRangeIdx,[numEvent 1]);
+    %first neuron's data
+    
+    for i = 1:numEvent%heating num
+        if idx(i,2) < numOfFrames
+            df_neuron(i,:) = normalized_C(neuronNum,idx(i,1):idx(i,2));
+        end
+    end
+    mean_norm_array(neuronNum,:) = mean(df_neuron);
+end
+
+%For each neuron responsive to social contact, neuronal activities were averaged crossing trials and then normalized to the baseline 
+%(averaged fluorescent intensity in 5 s before the initiation of social interaction). K-means clustering (6 clusters) was performed on this type of responses.
+
+
+baselineMean = mean(mean_norm_array(:,1:abs(examRangeIdx(1))),2);
+mean_norm_array = mean_norm_array - repmat(baselineMean,[1,examRangeSize]);
+%% sorting Array
+% tempArray = [];
+% [B,I] = sort(cellClassification(find(cellClassification(:,1) == 1),2));
+% excitedArray = mean_norm_array(I,:);
+% tempArray  = [tempArray; excitedArray];
+% 
+% [B,I] = sort(cellClassification(find(cellClassification(:,1) == 0),2));
+% nonresponsiveArray = mean_norm_array(I,:);
+% tempArray  = [tempArray; nonresponsiveArray];
+% 
+% [B,I] = sort(cellClassification(find(cellClassification(:,1) == -1),2));
+% inhibitedArray = mean_norm_array(I,:);
+% tempArray  = [tempArray; inhibitedArray];
+% 
+% imagesc(tempArray)
+[B,I]=sort(cellClassification(:,2));
+mean_norm_array_sorted = mean_norm_array(I,:);
+cellClassification_sorted = cellClassification(I,:);
+cumsumData = cumsum([activatedCellNum nonResponsiveCellNum inhibitiedCellNum]');
+
+
+%plotting
+f1 = figure('Units','inch','Position',[1 1 4 8],'Visible','on');
+
+imagesc(timeV, 1:size(cellClassification,1), mean_norm_array_sorted)
+hold on
+plot([0,0],ylim, 'LineStyle', '--', 'Color', 'k', 'LineWidth', 2);
+if checkBoutData == 0
+    plot([1,1],ylim, 'LineStyle', '--', 'Color', 'k', 'LineWidth', 2);
+end
+h = gca;
+cm = colormap(gca,othercolor('BuDRd_18'));
+c2 = colorbar(...
+    'Location',         'eastoutside');
+hL = ylabel(c2,'\DeltaF (z score)','FontSize',11);
+
+%     set(c2,'YTick',[-3 3]);
+% c2.Label.String = 'n\DeltaF';
+% set(hL,'Rotation',-90);
+
+caxis([-5 5])
+% h.YTick = 1:numMouse;
+xlabel('Time (s)');
+ylabel('Neuron Num');
+set(gcf,'Color',[1 1 1])
+set(gca,...
+    'linewidth',           2.0,...
+    'FontSize',            11,...
+    'FontName',          'Arial',...
+    'TickDir',            'out',...
+    'box',               'off')
+xRange = xlim;
+hold on
+line(xRange,[flipud(cumsumData)+.5 flipud(cumsumData)+.5],'LineWidth',1.2,'Color',[0 0 0])
+
+% if saveFigures == 'y' || saveFigures == 'Y'  
+    export_fig(gcf,'permTest sorted heatmap.pdf', '-depsc', '-painters');
+% end
+
+%% line graph
+f1 = figure('Units','inch','Position',[1 1 5 3],'Visible','on');
+% plot(timeV,organized_meanArray);
+organized_meanArray = [];
+organized_steArray=[];
+legendString=[];
+idxData = [ones(size(cumsumData,1),1) cumsumData];
+idxData(2,1) = idxData(1,2)+1;
+idxData(3,1) = idxData(2,2)+1;
+lineProps.col = {[1 0 0];[.5 .5 .5];[0 0 1]}
+for k= 1:3
+    organized_meanArray = [organized_meanArray; mean(mean_norm_array_sorted(idxData(k,1):idxData(k,2),:))];
+    temp_std= std((mean_norm_array_sorted(idxData(k,1):idxData(k,2),:)),0,1);
+    organized_steArray(k,:) = temp_std./sqrt(data(k));
+end
+
+mseb(timeV,organized_meanArray,organized_steArray,lineProps);
+
+
+set(gca,'linewidth',1.6,'FontSize',11,'FontName','Arial')
+set(gca, 'box', 'off')
+set(gcf,'Color',[1 1 1])
+ylim([-2.5 2.5]);
+xlabel('Time (s)')%,'FontSize',18)
+ylabel('\DeltaF (z score)')
+set(gca,'TickDir','out'); % The only other option is 'in'
+yRange = ylim;
+legend('Shock-activated','Shock-inhibited','non-responsive','Location','northeastoutside')
+legend('boxoff')
+if checkBoutData == 0
+    r = patch([0 1 1 0], [yRange(1) yRange(1) yRange(2)  yRange(2)],...
+        [1,0,0]);
+    set(r, 'FaceAlpha', 0.2,'LineStyle','none');
+else
+    hold on
+    plot([0,0],ylim, 'Color','k', 'LineStyle', '--', 'LineWidth', 2);
+end
+
+% if saveFigures == 'y' || saveFigures == 'Y'  
+    export_fig(gcf,'permTest sorted lineGraph.pdf', '-depsc', '-painters');
+% end
+
+%% normalize before....
+
+
+for neuronNum = 1: numTotalNeuron
+    idx = [videoEventIdx(:,1) videoEventIdx(:,1)] + repmat(examRangeIdx,[numEvent 1]);
+    %first neuron's data
+    
+    for i = 1:numEvent%heating num
+        if idx(i,2) < numOfFrames
+            df_neuron(i,:) = data_norm(neuronNum,idx(i,1):idx(i,2));
+        end
+    end
+    mean_norm_array(neuronNum,:) = mean(df_neuron);
+end
+
+%For each neuron responsive to social contact, neuronal activities were averaged crossing trials and then normalized to the baseline 
+%(averaged fluorescent intensity in 5 s before the initiation of social interaction). K-means clustering (6 clusters) was performed on this type of responses.
+
+
+baselineMean = mean(mean_norm_array(:,1:abs(examRangeIdx(1))),2);
+mean_norm_array = mean_norm_array - repmat(baselineMean,[1,examRangeSize]);
+temparray=mean_norm_array;
+
+%
 for neuronNum = 1: numTotalNeuron
         examRangeIdx = [-10 10];
     firstShockRangeIdx = [videoShockIdx(:,1) videoShockIdx(:,1)] + repmat(examRangeIdx,[numTotalShock 1]);
@@ -308,6 +477,8 @@ title('T-Test')
 
 if saveFigures == 'y' || saveFigures == 'Y'
     export_fig(gcf,'T-Test Pie Plot.pdf', '-depsc', '-painters');
+%     print(gcf,'T-Test Pie Plot.pdf', '-depsc', '-painters');
+
 else
 end
 %close figure when it ends.
