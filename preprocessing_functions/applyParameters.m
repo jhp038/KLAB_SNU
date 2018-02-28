@@ -2,6 +2,7 @@ function fpObj = applyParameters(fpObj,guiOut)%factor,examRange,waveMode,alignMo
 %% applyParameters
 %Written by Han Heol Park and Jong Hwi Park
 % 09/15/2017
+%
 % 1.Subsamples the FP data via given factor. ex) 1017 Hz -> 101.7 Hz when subsampled by 10.
 % 2.Records given examRange, time window with matching indices, and get required number of indices.
 % 3.Records selected wavemode

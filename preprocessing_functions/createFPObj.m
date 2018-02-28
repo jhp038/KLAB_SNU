@@ -1,8 +1,7 @@
-function fpObj = createFPObj()
+function fpObj = createFPObj(file)
 %Load MetaData file
 %% Trying new things..
 
-file = uipickfiles('FilterSpec','*.xlsx'); %this has to search for .xlsx files
 %
 if iscell(file) == 0
     errordlg('Please select .xlsx files')

@@ -1,4 +1,10 @@
 function fpObj = getEventWindowIdx(fpObj)
+%% fpObj = getEventWindowIdx(fpObj)
+%Written by Han Eol Park and Jong Hwi Park
+% 02/27/2018 (date when this comment was written by PJH)
+%
+% get event window idx on repeat case. 
+% other case need to be implemented.
 
 totalfpObjNum = size(fpObj,2);
 for fpObjNum = 1:totalfpObjNum

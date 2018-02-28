@@ -1,4 +1,12 @@
-function varargout = trimmingGUI(varargin)
+function varargout = trimmingGUI_2(varargin)
+%% trimmingGUI_2
+% Written by Jong Hwi Park
+% 02/27/2018 (date when this comment was written by PJH)
+%
+% GUI that helps visualizes data and takes user input to trim and discard
+% data
+
+
 % TRIMMINGGUI_2 MATLAB code for trimmingGUI_2.fig
 %      TRIMMINGGUI_2, by itself, creates a new TRIMMINGGUI_2 or raises the existing
 %      singleton*.

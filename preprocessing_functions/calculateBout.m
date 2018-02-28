@@ -1,4 +1,14 @@
 function fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange)
+%% fpObj = calculateBout(fpObj,3,3,3,[-15 30])
+%Written by Jong Hwi Park
+% 02/27/2018 (date when this comment was written by PJH)
+%
+% Calculates bouts via TTLOnIdx with given criteria.
+% Normalizes via given normalize window (nWindow ~ 0 as baseline)
+% Extracts Firstlick/lastlick para event array with given range,manualExamRange
+
+%TO DO LIST: need to implement 473 ONLY case.
+
 % Output to fpObj
 fpObj.timeWindow = timeWindow;
 fpObj.numWindow = numWindow;
@@ -9,7 +19,7 @@ switch dFFChoice
     case '473n405'
         for numMouse = 1:totalMouseNum
             %initialization
-            disp(['NumMouse: ' num2str(numMouse)])
+            disp(['Processing NumMouse: ' num2str(numMouse)])
             boutWindow = timeWindow;
             window = round(boutWindow *fpObj.samplingRate);
             lickingIdx = fpObj.idvData(numMouse).TTLOnIdx{1,1};
@@ -45,6 +55,7 @@ switch dFFChoice
             boutIdx = ones(numActualBout,2);
             boutIdx(:,1) = lickingIdx(on_off_Idx(:,1));
             boutIdx(:,2) = lickingIdx(on_off_Idx(:,2));
+            %dff comes in now~!
             dFF = fpObj.idvData(numMouse).dFF;
             
             
@@ -133,7 +144,7 @@ switch dFFChoice
             
             %raw
             fpObj.idvData(numMouse).meanFirstBout = meanFirstBout;
-            fpObj.idvData(numMouse).steFirstBout = steFirstBout;
+            fpObj.idvData(numMouse).steFirstBout = steFirstBout;  
             
             fpObj.idvData(numMouse).meanLastBout = meanLastBout;
             fpObj.idvData(numMouse).steLastBout = steLastBout;

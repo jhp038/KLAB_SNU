@@ -1,4 +1,11 @@
 function fpObj = getTTLOnOffTime(fpObj)
+%% fpObj = getTTLOnOffTime(fpObj)
+%Written by Han Heol Park and Jong Hwi Park
+% 02/27/2018 (date when this comment was written by PJH)
+%
+% Extracts TTL on and off time via calculating threshold
+% and find crossings that goes over it
+
 totalfpObjNum = size(fpObj,2);
 
 for fpObjNum = 1:totalfpObjNum

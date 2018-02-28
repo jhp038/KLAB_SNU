@@ -1,4 +1,10 @@
 function fpObj = setDataTrimming(fpObj,trimGuiOut)
+%% fpObj = setDataTrimming(fpObj)
+%Written by Han Heol Park and Jong Hwi Park
+% 02/27/2018 (date when this comment was written by PJH)
+%
+% takes input from trimmingGui_2's output and applies the trimming range
+
 trimmingRange = trimGuiOut.trimmingRange;
 mouseNum = trimGuiOut.mouseNum;
 choiceArray = trimGuiOut.choiceArray;

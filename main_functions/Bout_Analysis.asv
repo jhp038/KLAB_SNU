@@ -21,11 +21,10 @@ end
 
 %%
 % parameter initialization .. 
-timeWindow = 3; %sec
-numWindow = 3; %number of licks
-
+timeWindow = 2; %sec
+numWindow = 2; %number of licks
 normalizeWindow = 3; %normalize window in sec
-manualExamRange = [-5 20]; %in sec
+manualExamRange = [-5 10]; %in sec
 fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange);
 
 %% Visualization

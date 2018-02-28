@@ -1,24 +1,20 @@
 function fpObj = FPObjMake
-%% FPObjMake 
+%% FPObjMake
 % Written by Jong Hwi Park
 % 09/15/2017
 % Creates fpObj (createFPObj)
-% and loads Dv and Wav file (loadFPData) 
+% and loads Dv and Wav file (loadFPData)
 
+disp(['Please choose metadata.xlsx file']);
 
-close all
-clear all
-disp(['Loading FP data']);
-fpObj = createFPObj;
+fpObj = checkFPObj;
+
 
 if isempty(fpObj)
     return
 end
 %Load data
-tic;
-fpObj = loadFPData(fpObj);
-disp(['Finished loading data']);
-toc;
+
 
 % saveFPObj(fpObj);
 
