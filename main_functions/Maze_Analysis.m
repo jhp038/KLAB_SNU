@@ -2,34 +2,35 @@
 clear all;close all
 
 %load data
-fpObj = FPObjMake;
-
-%data pre processing
-guiOut = fpGUI_2;
-fpObj = applyParameters(fpObj,guiOut);
-
-
-fpObj = getTTLOnOffTime(fpObj);
-fpObj = getEventWindowIdx(fpObj);
-trimGuiOut = trimmingGUI_2;
-%trimming data and get dFF
- fpObj = setDataTrimming(fpObj,trimGuiOut);
-fpObj = getTimeVectors(fpObj);
-fpObj = applyTrimmingOffset(fpObj); 
-fpObj = calculatedFF_choice(fpObj);
-
-%trimmed data via TTL Onset
-fpObj = trimdFF_TTLOnset(fpObj);
-
-%% Noldus data Analysis
-%Noldus Data Loading
-%loadNoldusFile(fpObj, Meta data column number for noldus file path)
-tic
-fpObj = getVideoOnOffIdx(fpObj);
-toc
-fpObj = loadNoldusFile(fpObj,6); 
-
-
+if fpObj.loaded == 0
+    fpObj = FPObjMake;
+    
+    %data pre processing
+    guiOut = fpGUI_2;
+    fpObj = applyParameters(fpObj,guiOut);
+    
+    
+    fpObj = getTTLOnOffTime(fpObj);
+    fpObj = getEventWindowIdx(fpObj);
+    trimGuiOut = trimmingGUI_2;
+    %trimming data and get dFF
+    fpObj = setDataTrimming(fpObj,trimGuiOut);
+    fpObj = getTimeVectors(fpObj);
+    fpObj = applyTrimmingOffset(fpObj);
+    fpObj = calculatedFF_choice(fpObj);
+    
+    %trimmed data via TTL Onset
+    fpObj = trimdFF_TTLOnset(fpObj);
+    
+    %% Noldus data Analysis
+    %Noldus Data Loading
+    %loadNoldusFile(fpObj, Meta data column number for noldus file path)
+    tic
+    fpObj = getVideoOnOffIdx(fpObj);
+    toc
+    fpObj = loadNoldusFile(fpObj,6);
+    
+end
 
 %Analyze and plot 2D heatmap with mouse position
 fpObj = getNoldusPosition(fpObj);

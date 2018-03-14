@@ -1,15 +1,19 @@
 %% main function for tracking cell
-fileNames = uipickfiles('REFilter','\.mat$');
-file_names = [];
-for numFiles = 1:size(fileNames,2)
-    converted_neuron = [];
-    [pathstr,name,ext] = fileparts(fileNames{1,numFiles}) ;
-    cd(pathstr)
-    load([name ext]);
 
-    converted_neuron = convertSpatialDimension(neuron);
-    save([name '_spatial.mat'],'converted_neuron')
-    file_names{1,numFiles} = [name '_spatial.mat'];
+function cell_registered_struct=CellReg_KLAB(neurons,names)
+% fileNames = uipickfiles('REFilter','\.mat$');
+
+for numNeuron = 1:size(neurons,1)
+    neuron =neurons{numNeuron};
+    name = names{numNeuron};
+    spatial_footprints = [];
+    number_of_cells = size(neuron.A , 2);
+    [d1 d2] = size(neuron.Cn);
+    for n=1:number_of_cells
+        spatial_footprints(n,:,:) = reshape(neuron.A(:,n), d1 , d2);
+    end
+    save([name '_spatial.mat'],'spatial_footprints')
+    file_names{1,numNeuron} = [name '_spatial.mat'];
 end
 
 %% Method overview:
@@ -42,8 +46,9 @@ end
 % 5. Obtaining the final cell registration based on a clustering algorithm.
 
 %% Setting paths for the cell registration procedure:
-
+% clearvars -except file_names pathstr
 % Defining the results_directory and creating the figures_directory:
+pathstr = pwd;
 results_directory=pathstr;
 figures_directory=fullfile(results_directory,'Figures');
 if exist(figures_directory,'dir')~=7
@@ -66,7 +71,7 @@ figures_visibility='on'; % either 'on' or 'off' (in any case figures are saved)
 
 % Defining the parameters:
 imaging_technique='one_photon'; % either 'one_photon' or 'two_photon'
-microns_per_pixel=.5;
+microns_per_pixel=1;
 
 % Loading the data:
 disp('Stage 1 - Loading sessions')
@@ -125,7 +130,7 @@ disp('Done')
 % correlations from the data.
 
 % Defining the parameters for the probabilstic modeling:
-maximal_distance=12; % cell-pairs that are more than 12 micrometers apart are assumed to be different cells
+maximal_distance=15; % cell-pairs that are more than 12 micrometers apart are assumed to be different cells
 normalized_maximal_distance=maximal_distance/microns_per_pixel;
 p_same_certainty_threshold=0.95; % certain cells are those with p_same>threshld or <1-threshold
 

@@ -10,8 +10,8 @@ msObj = msTrimmingData(msObj);
 
 
 %now, calculate bout
-boutWindow = 10;
-numWindow = 10;
+boutWindow = 3;
+numWindow = 3;
 msObj = msCalculateBout(msObj);
 
 %% plotting

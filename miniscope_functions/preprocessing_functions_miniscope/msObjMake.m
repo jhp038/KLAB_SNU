@@ -34,6 +34,7 @@ for numFIles = 1:size(fileNames,2)
             msObj.msData.neuron = neuron;
             msObj.msData.numTotalNeuron = size(neuron.C_raw,1);
             msObj.msData.numOfFrames = size(neuron.C_raw,2);
+            msObj.msData.fileName = name;
         case '.xlsx'
             cd(pathstr)
             [num,txt,raw] = xlsread([name ext]);

@@ -175,7 +175,7 @@ for neuronNum = 1: numTotalNeuron
     
     %%
     if saveFigures == 'y' || saveFigures == 'Y'
-        export_fig(gcf,['neuronNum ' num2str(neuronNum) '.pdf'], '-depsc', '-painters')   
+        export_fig(gcf,['neuronNum ' num2str(neuronNum) '.jpg'], '-depsc', '-painters')   
     else
         %         pause
     end
@@ -257,7 +257,7 @@ title('Permutation Test')
 set(gcf,'Color',[1 1 1])
 legend({'Shock-activated';'Shock-inhibited';'non-responsive'},'Location','southeastoutside','Orientation','vertical')
 % if saveFigures == 'y' || saveFigures == 'Y'  
-    export_fig(gcf,'permTest Pie Plot.pdf', '-depsc', '-painters');
+    export_fig(gcf,'permTest Pie Plot.jpg', '-depsc', '-painters');
 % end
 %% classified cell heatmap
 examRange = [-5 5];
@@ -360,7 +360,7 @@ hold on
 line(xRange,[flipud(cumsumData)+.5 flipud(cumsumData)+.5],'LineWidth',1.2,'Color',[0 0 0])
 
 % if saveFigures == 'y' || saveFigures == 'Y'  
-    export_fig(gcf,'permTest sorted heatmap.pdf', '-depsc', '-painters');
+    export_fig(gcf,'permTest sorted heatmap.jpg', '-depsc', '-painters');
 % end
 
 %% line graph
@@ -402,7 +402,7 @@ else
 end
 
 % if saveFigures == 'y' || saveFigures == 'Y'  
-    export_fig(gcf,'permTest sorted lineGraph.pdf', '-depsc', '-painters');
+    export_fig(gcf,'permTest sorted lineGraph.jpg', '-depsc', '-painters');
 % end
 
 %% normalize before....
@@ -476,8 +476,8 @@ legend({'Shock-responsive';'Shock-non-responsive'},'Location','southeastoutside'
 title('T-Test')
 
 if saveFigures == 'y' || saveFigures == 'Y'
-    export_fig(gcf,'T-Test Pie Plot.pdf', '-depsc', '-painters');
-%     print(gcf,'T-Test Pie Plot.pdf', '-depsc', '-painters');
+    export_fig(gcf,'T-Test Pie Plot.jpg', '-depsc', '-painters');
+%     print(gcf,'T-Test Pie Plot.jpg', '-depsc', '-painters');
 
 else
 end
