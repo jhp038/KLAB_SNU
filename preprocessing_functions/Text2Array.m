@@ -43,7 +43,9 @@ else
 end   
 
 %%
+
 for i=1:size(dirInfo)
+
     filename = dirInfo(i).name;
     if isempty(strfind(filename, 'wmv')) == 0 || isempty(strfind(filename, 'avi')) == 0 || isempty(strfind(filename,'mpg')) == 0
         output = filename;
@@ -53,10 +55,10 @@ for i=1:size(dirInfo)
         fidr = fopen([folderName filesep filename]);
         
         %6 is Row offset, and 0 is column offset
-        Data = dlmread([folderName filesep filename], '\t',6,0); 
+        Data = dlmread([folderName filesep filename], '\t',6,0);
         % preset option of the program
         %col 3 time point
-        %col 4 sampling rate 
+        %col 4 sampling rate
         % col 5 data starts
         OrgData = zeros(size(Data,1)*128, 2, 'double');
         
@@ -73,7 +75,7 @@ for i=1:size(dirInfo)
         samplingRate = Data(1,4);
         fclose(fidr);
     end
-   
+    
 end
 
 fprintf('Done!\n');

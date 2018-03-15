@@ -2,8 +2,8 @@
 clear all;close all
 
 %load data
-if fpObj.loaded == 0
-    fpObj = FPObjMake;
+fpObj = FPObjMake;
+if   fpObj(1).loaded == 0
     
     %data pre processing
     guiOut = fpGUI_2;
@@ -29,7 +29,8 @@ if fpObj.loaded == 0
     fpObj = getVideoOnOffIdx(fpObj);
     toc
     fpObj = loadNoldusFile(fpObj,6);
-    
+    saveFPObj(fpObj)
+
 end
 
 %Analyze and plot 2D heatmap with mouse position

@@ -294,3 +294,5 @@ switch dFFChoice
         end
         
 end
+
+disp('Done!')

@@ -13,5 +13,5 @@ msObj = msObjMake;
 msObj = msTrimmingDataShock(msObj);
 msObj = msCalculateParaEvent(msObj);
 %% plotting function
-plotmsShock(msObj,'y')
-% plotKmeansClustering(msObj,[-5 5],5,100000);
+plotmsShock(msObj,'n')
+plotKmeansClustering(msObj,[-5 5],5,5000);

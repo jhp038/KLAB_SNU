@@ -1,6 +1,7 @@
 clear all; clc
 
 %load data
+
 fpObj = FPObjMake_dual;
 
 %data pre processing0

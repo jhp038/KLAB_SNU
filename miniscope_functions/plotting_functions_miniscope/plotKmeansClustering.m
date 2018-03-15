@@ -104,9 +104,9 @@ line(repmat(xRange,[size(totalNumK) 1]),[cum_idxNum4cluster+.5 cum_idxNum4cluste
 title(['K = ' num2str(totalNumK)])
 % line graph
 %
-export_fig(gcf,'Kmeans Clustering heatmap.jpg')
-% export_fig(gcf,'Kmeans Clustering heatmap.pdf')
-export_fig(gcf,'Kmeans Clustering heatmap.pdf', '-depsc', '-painters');
+% export_fig(gcf,'Kmeans Clustering heatmap.jpg')
+% % export_fig(gcf,'Kmeans Clustering heatmap.pdf')
+% export_fig(gcf,'Kmeans Clustering heatmap.pdf', '-depsc', '-painters');
 
 
 
@@ -138,8 +138,8 @@ else
     plot([0,0],ylim, 'Color','k', 'LineStyle', '--', 'LineWidth', 2);
 end
 
-export_fig(gcf,'Kmeans Clustering 2D.jpg')
-export_fig(gcf,'Kmeans Clustering 2D.pdf', '-depsc', '-painters');
+% export_fig(gcf,'Kmeans Clustering 2D.jpg')
+% export_fig(gcf,'Kmeans Clustering 2D.pdf', '-depsc', '-painters');
 
 
 

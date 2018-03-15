@@ -23,17 +23,16 @@ if size(processed_list,1)>0
         chosen_dir= processed_list(choice).name;
         cd(chosen_dir)
         mat_list = dir('*.mat*');
-        fpObj.loaded = 1;   %save loaded status for later usage
+          fpObj(1).loaded = 1;   %save loaded status for later usage
         varargout{:} = load(mat_list.name);
         fprintf(['##### Following data is successfully loaded : ' mat_list.name ' #####\n'])
-        cd ..
     else
         fpObj = createFPObj(file);
         tic;
         fpObj = loadFPData(fpObj);
         disp(['Finished loading data']);
         toc;
-        fpObj.loaded = 0;
+          fpObj(1).loaded = 0;
         varargout{:} = fpObj;
     end
 else
@@ -43,7 +42,7 @@ else
     fpObj = loadFPData(fpObj);
     disp(['Finished loading data']);
     toc;
-    fpObj.loaded = 0;
+    fpObj(1).loaded = 0;
     varargout{:} = fpObj;
 end
 end

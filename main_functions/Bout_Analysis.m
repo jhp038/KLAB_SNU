@@ -2,7 +2,7 @@ clear all;close all
 
 
 fpObj = FPObjMake;
-if fpObj.loaded == 0
+if   fpObj(1).loaded == 0
     %data pre processing
     guiOut = fpGUI_2;
     fpObj = applyParameters(fpObj,guiOut);
@@ -15,19 +15,18 @@ if fpObj.loaded == 0
     fpObj = getTimeVectors(fpObj);
     fpObj = applyTrimmingOffset(fpObj);
     fpObj = calculatedFF_choice(fpObj);
+    
+    
+    %%
+    % parameter initialization ..
+    timeWindow = 3; %sec
+    numWindow = 3; %number of licks
+    
+    normalizeWindow = 3; %normalize window in sec
+    manualExamRange = [-5 20]; %in sec
+    fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange);
     saveFPObj(fpObj)
 end
-
-
-%%
-% parameter initialization .. 
-timeWindow = 3; %sec
-numWindow = 3; %number of licks
-
-normalizeWindow = 3; %normalize window in sec
-manualExamRange = [-5 20]; %in sec
-fpObj = calculateBout(fpObj,timeWindow,numWindow,normalizeWindow,manualExamRange);
-
 %% Visualization
 plotBout(fpObj,manualExamRange,'Y');
 % plotBoutInfo(fpObj,5,'N');

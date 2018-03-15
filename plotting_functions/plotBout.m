@@ -170,7 +170,7 @@ for numMouse = 1:totalMouseNum
     % save
     if saveFigures =='y' || saveFigures =='Y'
         print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.pdf'])
-        print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.svg'])
+%         print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.svg'])
     end
 end
 
