@@ -30,8 +30,7 @@ for numMouse = 1:totalMouseNum
     %% Plotting dFF with bout
     
     
-    figure('Units','inch','Position',[1 1 9 8],'visible','on');
-    subplot(4,2,1:4)
+    figure('Units','inch','Position',[1 1 6 3.5],'visible','on');
     set(gcf,'renderer','Painters')
     
     
@@ -39,7 +38,8 @@ for numMouse = 1:totalMouseNum
 
     hold on
     xlim([timeV(1) timeV(end)]);
-    yRange = [-3 10];
+%     yRange = [-3 10];
+yRange = ylim;
     xRange = xlim;
     ylim([yRange(1),yRange(2)]);
     
@@ -72,8 +72,8 @@ for numMouse = 1:totalMouseNum
         ['Interval = ' num2str(timeWindow) 's'  '     Interlick =  >' num2str(numWindow) ' licks' ]},...
         'FontSize',10)
     %% Plotting mean first lick exam Range
-    
-    subplot(4,2,5)
+    figure('Units','inch','Position',[1 1 8 8],'visible','on');
+    subplot(2,2,1)
     timeV = linspace(manualExamRange(1),manualExamRange(2),size(fpObj.idvData(1).meanFirstBout,2));
     
     mseb(timeV,fpObj.idvData(numMouse).meanFirstBout,fpObj.idvData(numMouse).steFirstBout);
@@ -95,7 +95,7 @@ for numMouse = 1:totalMouseNum
     xlim([examRange(1) examRange(2)])
     
     %% Plotting mean first lick exam Range NORMALIZED
-    subplot(4,2,6)
+    subplot(2,2,2)
     
     mseb(timeV,fpObj.idvData(numMouse).meanNormFirstBout,fpObj.idvData(numMouse).steNormFirstBout);
     hold on
@@ -118,7 +118,7 @@ for numMouse = 1:totalMouseNum
     
     %% Plotting mean last lick exam Range
     
-    subplot(4,2,7)
+    subplot(2,2,3)
     mseb(timeV,fpObj.idvData(numMouse).meanLastBout,fpObj.idvData(numMouse).steLastBout);
     hold on
     
@@ -141,7 +141,7 @@ for numMouse = 1:totalMouseNum
     
     
     %% Plotting mean last lick exam Range NORMALIZED
-    subplot(4,2,8)
+    subplot(2,2,4)
     
     mseb(timeV,fpObj.idvData(numMouse).meanNormLastBout,fpObj.idvData(numMouse).steNormLastBout);
     hold on
@@ -170,7 +170,7 @@ for numMouse = 1:totalMouseNum
     % save
     if saveFigures =='y' || saveFigures =='Y'
         print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.pdf'])
-%         print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.svg'])
+        print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' Bout.jpg'])
     end
 end
 
@@ -182,7 +182,6 @@ end
 
 fig1 = figure('Units',            'inch',                                 ...
     'Position',        [1 1 7 5]);
-% title(titleString)
 sub2 = subplot(2,2,3:4);
 set(sub2,...
     'Position',         [0.13 0.3 0.7 0.4])
@@ -190,6 +189,7 @@ imagesc(timeV,1:numMouse,dffMFBn);
 hold on
 
 plot([0,0],ylim, 'LineStyle', '--', 'Color', [1 1 1], 'LineWidth', 2);
+title('FirstLick Norm Heatmap')
 
 h = gca;
 cm = colormap(gca,'hot');
@@ -201,7 +201,7 @@ hL = ylabel(c2,'n\DeltaF/F');
 % c2.Label.String = 'n\DeltaF';
 % set(hL,'Rotation',-90);
 
-caxis([-1 6])
+% caxis([-1 6])
 h.YTick = 1:numMouse;
 xlabel('Time (s)');
 ylabel('Mouse');
@@ -214,14 +214,13 @@ set(gca,...
 set(gcf,'Color',[1 1 1])
 if saveFigures =='y' || saveFigures =='Y'
     print(gcf, '-painters', '-depsc', ['FirstLick norm Heatmap.pdf'])
-    print(gcf, '-painters', '-depsc', ['FirstLick norm Heatmap.svg'])
+    print(gcf, '-painters', '-depsc', ['FirstLick norm Heatmap.jpg'])
 end
 % export_fig('FirstLick norm Heatmap','-eps','-jpg')
 
 %% SECOND
 fig2 = figure('Units',            'inch',                                 ...
     'Position',        [1 1 7 5]);
-% title(titleString)
 sub3 = subplot(2,2,3:4);
 set(sub3,...
     'Position',         [0.13 0.3 0.7 0.4])
@@ -229,6 +228,7 @@ imagesc(timeV,1:numMouse,dffMLBn);
 hold on
 
 plot([0,0],ylim, 'LineStyle', '--', 'Color', [1 1 1], 'LineWidth', 2);
+title('LastLick Norm Heatmap')
 
 h = gca;
 cm = colormap(gca,'hot');
@@ -240,7 +240,7 @@ hL = ylabel(c2,'n\DeltaF/F');
 % c2.Label.String = 'n\DeltaF';
 % set(hL,'Rotation',-90);
 
-caxis([-1 6])
+% caxis([-1 6])
 h.YTick = 1:numMouse;
 xlabel('Time (s)');
 ylabel('Mouse');
@@ -251,10 +251,10 @@ set(gca,...
     'TickDir',            'out',...
     'box',               'off')
 set(gcf,'Color',[1 1 1])
-% if saveFigures =='y' || saveFigures =='Y'
-%     print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' LastLick norm Heatmap.pdf'])
-%     print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' LastLick norm Heatmap.svg'])
-% end
+if saveFigures =='y' || saveFigures =='Y'
+    print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' LastLick norm Heatmap.pdf'])
+    print(gcf, '-painters', '-depsc', [fpObj.idvData(numMouse).Description ' LastLick norm Heatmap.jpg'])
+end
 %%
 meanOf_dffMFB = mean(dffMFB);
 meanOf_dffMFB_ste = std(dffMFB,0,1)/sqrt(size(dffMFB,1));
@@ -314,7 +314,7 @@ for i = 1:4
     xlim([examRange(1)-.001 examRange(2)+.001])
     if saveFigures =='y' || saveFigures =='Y'
         print(gcf, '-painters', '-depsc', [titleString '.pdf'])
-        print(gcf, '-painters', '-depsc', [titleString '.svg'])
+        print(gcf, '-painters', '-depsc', [titleString '.jpg'])
     end
     % export_fig(titleString,'-eps','-jpg')
     
