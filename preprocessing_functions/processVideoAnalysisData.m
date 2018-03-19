@@ -10,122 +10,124 @@ meanNonDffStack = [];
 [FileName] = uipickfiles('FilterSpec','*.mat'); %this has to search for .mat files
 %%
 for mouseNum = 1:totalMouseNum
-LEDOnIdx = fpObj.idvData(mouseNum).LEDOnIdx;
-% [FileName,PathName] = uigetfile('*.mat','Select the MATLAB data file');
-
-loaded_frame = load(FileName{1,mouseNum});
-% time = time.ans./30;
-%Just for SR's data...
-time = loaded_frame.ans;
-
-%align via subtracting first LEDOn Idx
-time = time - LEDOnIdx(1);
-
-%divide by 30 since frame rate is 30
-time = time./30;
-
-
-
-TTLOnIdx = fpObj.idvData(mouseNum).TTLOnIdx{1,1};
-disp(['Mouse ID : ' num2str(fpObj.idvData(mouseNum).mouseID)]);
-data = fpObj.idvData(mouseNum).trimmedRawData(TTLOnIdx(1):TTLOnIdx(2),:);
-dFF = fpObj.idvData(mouseNum).dFF;
-timeV = fpObj.idvData(mouseNum).offsetTimeVectors;
-dFF_inRange = dFF(TTLOnIdx(1):TTLOnIdx(2));
-timeV_inRange = timeV(TTLOnIdx(1):TTLOnIdx(2));
-timeV_inRange = timeV_inRange -timeV_inRange(1);
-
-
-
-
-
-boutOnIdx =dsearchn(timeV_inRange,time(:,1));
-boutOffIdx = dsearchn(timeV_inRange,time(:,2));
-totalNumBout = size(boutOnIdx,1);
-boutIdx = [boutOnIdx boutOffIdx] ;
-plottingIdx = [boutOnIdx boutOffIdx] + repmat(examRangeIdx,[totalNumBout,1]);
-plottingIdx_firstLick = [boutOnIdx boutOnIdx] + repmat(examRangeIdx,[totalNumBout,1]);
-%% fist lick mean
-firstBoutDffArray = [];
-for boutNum = 1: totalNumBout
-    if plottingIdx_firstLick(boutNum,1) < 0
-        return
-    else
-        firstBoutDffArray = [firstBoutDffArray;dFF_inRange(plottingIdx_firstLick(boutNum,1):plottingIdx_firstLick(boutNum,2))'];
+    LEDOnIdx = fpObj.idvData(mouseNum).LEDOnIdx;
+    % [FileName,PathName] = uigetfile('*.mat','Select the MATLAB data file');
+    
+    loaded_frame = load(FileName{1,mouseNum});
+    % time = time.ans./30;
+    %Just for SR's data...
+    time = loaded_frame.ans;
+    
+    %align via subtracting first LEDOn Idx
+    time = time - LEDOnIdx(1);
+    
+    %divide by 30 since frame rate is 30
+    time = time./30;
+    
+    
+    
+    TTLOnIdx = fpObj.idvData(mouseNum).TTLOnIdx{1,1};
+    disp(['Mouse ID : ' num2str(fpObj.idvData(mouseNum).mouseID)]);
+    data = fpObj.idvData(mouseNum).trimmedRawData(TTLOnIdx(1):TTLOnIdx(2),:);
+    dFF = fpObj.idvData(mouseNum).dFF;
+    timeV = fpObj.idvData(mouseNum).offsetTimeVectors;
+    dFF_inRange = dFF(TTLOnIdx(1):TTLOnIdx(2));
+    timeV_inRange = timeV(TTLOnIdx(1):TTLOnIdx(2));
+    timeV_inRange = timeV_inRange -timeV_inRange(1);
+    
+    
+    
+    
+    
+    boutOnIdx =dsearchn(timeV_inRange,time(:,1));
+    boutOffIdx = dsearchn(timeV_inRange,time(:,2));
+    totalNumBout = size(boutOnIdx,1);
+    boutIdx = [boutOnIdx boutOffIdx] ;
+    plottingIdx = [boutOnIdx boutOffIdx] + repmat(examRangeIdx,[totalNumBout,1]);
+    plottingIdx_firstLick = [boutOnIdx boutOnIdx] + repmat(examRangeIdx,[totalNumBout,1]);
+    %% fist lick mean
+    firstBoutDffArray = [];
+    for boutNum = 1: totalNumBout
+        if plottingIdx_firstLick(boutNum,1) < 0
+            return
+        else
+            firstBoutDffArray = [firstBoutDffArray;dFF_inRange(plottingIdx_firstLick(boutNum,1):plottingIdx_firstLick(boutNum,2))'];
+        end
     end
-end
-steFirstBout = std(firstBoutDffArray,0,1)/sqrt(size(firstBoutDffArray,1));
-
-meanFBDA = mean(firstBoutDffArray);
-stackmeanFBDA(mouseNum,:) = meanFBDA;
-figure
-mseb(linspace(examRange(1),examRange(2),size(meanFBDA,2)),meanFBDA,steFirstBout)
-hold on
-set(gca,'linewidth',1.6,'FontSize',15,'FontName','Arial')
-set(gca, 'box', 'off')
-
-set(gcf,'Color',[1 1 1])
-
-xlabel('Time (s)')%,'FontSize',18)
-ylabel('\DeltaF/F');
-%     title([fpObj.idvData(numMouse).Description ' (Norm) First Lick'],'FontSize',6)
-
-plot([0 0],ylim,'Color',[1 0 0]);
-
-xlim([examRange(1) examRange(2)])
-set(gca,'TickDir','out');
-% saveas(gcf,[fpObj.idvData(mouseNum).Description ' first Lick.jpg']);
-% The only other option is 'in'
-
-%% Plotting dFF with bout
-
-% 
-figure('Units','inch','Position',[1 1 10 5]);
-% left = left + width+2+.2;
-% figure
-
-plot(timeV_inRange,dFF_inRange,'k')
-hold on
-xlim([timeV_inRange(1) timeV_inRange(end)]);
-ylim([-3 5])
-yRange = ylim;
-xRange = xlim;
-ylim([yRange(1),yRange(2)]);
-
-
-%Shading bout as light red
-for i = 1: totalNumBout
-    r = patch([timeV(boutIdx(i,1)) timeV(boutIdx(i,2)) timeV(boutIdx(i,2)) timeV(boutIdx(i,1))], [yRange(1) yRange(1) yRange(2)  yRange(2)],...
-        [1,0,0]);
-    set(r, 'FaceAlpha', 0.2,'LineStyle','none');
-    uistack(r,'up')
-end
-
-
-% setting font size, title
-set(gca,'linewidth',1.6,'FontSize',15,'FontName','Arial')
-set(gca, 'box', 'off')
-set(gcf,'Color',[1 1 1])
-  set(gca,'TickDir','out'); % The only other option is 'in'
-
-xlabel('Time (s)')%,'FontSize',18)
-ylabel('\DeltaF/F (%)');
-title([fpObj.idvData(mouseNum).Description ' Bout'],'FontSize',10)
-%% Calculate bout and nonBout mean
-
+    steFirstBout = std(firstBoutDffArray,0,1)/sqrt(size(firstBoutDffArray,1));
+    
+    meanFBDA = mean(firstBoutDffArray);
+    stackmeanFBDA(mouseNum,:) = meanFBDA;
+    figure
+    mseb(linspace(examRange(1),examRange(2),size(meanFBDA,2)),meanFBDA,steFirstBout)
+    hold on
+    set(gca,'linewidth',1.6,'FontSize',15,'FontName','Arial')
+    set(gca, 'box', 'off')
+    
+    set(gcf,'Color',[1 1 1])
+    
+    xlabel('Time (s)')%,'FontSize',18)
+    ylabel('\DeltaF/F');
+    %     title([fpObj.idvData(numMouse).Description ' (Norm) First Lick'],'FontSize',6)
+    
+    plot([0 0],ylim,'Color',[1 0 0]);
+    
+    xlim([examRange(1) examRange(2)])
+    set(gca,'TickDir','out');
+    % saveas(gcf,[fpObj.idvData(mouseNum).Description ' first Lick.jpg']);
+    % The only other option is 'in'
+    
+    export_fig(gcf,'feedingFirstLick.pdf', '-dpdf', '-painters');
+    
+    %% Plotting dFF with bout
+    
+    %
+    figure('Units','inch','Position',[1 1 10 5]);
+    % left = left + width+2+.2;
+    % figure
+    
+    plot(timeV_inRange,dFF_inRange,'k')
+    hold on
+    xlim([timeV_inRange(1) timeV_inRange(end)]);
+    ylim([-3 5])
+    yRange = ylim;
+    xRange = xlim;
+    ylim([yRange(1),yRange(2)]);
+    
+    
+    %Shading bout as light red
+    for i = 1: totalNumBout
+        r = patch([timeV(boutIdx(i,1)) timeV(boutIdx(i,2)) timeV(boutIdx(i,2)) timeV(boutIdx(i,1))], [yRange(1) yRange(1) yRange(2)  yRange(2)],...
+            [1,0,0]);
+        set(r, 'FaceAlpha', 0.2,'LineStyle','none');
+        uistack(r,'up')
+    end
+    
+    
+    % setting font size, title
+    set(gca,'linewidth',1.6,'FontSize',15,'FontName','Arial')
+    set(gca, 'box', 'off')
+    set(gcf,'Color',[1 1 1])
+    set(gca,'TickDir','out'); % The only other option is 'in'
+    
+    xlabel('Time (s)')%,'FontSize',18)
+    ylabel('\DeltaF/F (%)');
+    title([fpObj.idvData(mouseNum).Description ' Bout'],'FontSize',10)
+    %% Calculate bout and nonBout mean
+    
     %% bar graph
     %initialize for each mouse
     meanBoutDff = [];
     hozconcatDff = [];
     hozconcat_nonDff = [];
-
+    
     for boutNum = 1:totalNumBout
         meanBoutDff(boutNum,1) = mean(dFF(boutIdx(boutNum,1):boutIdx(boutNum,2)));
         steBoutDff(boutNum,1) = std(dFF(boutIdx(boutNum,1):boutIdx(boutNum,2)),0,1)/length(dFF(boutIdx(boutNum,1):boutIdx(boutNum,2)));
         hozconcatDff = [hozconcatDff dFF(boutIdx(boutNum,1):boutIdx(boutNum,2))'];
         hozconcat_nonDff = (sum(dFF) - sum(hozconcatDff)) / (size(dFF,1) - size(hozconcatDff,2));
     end
-   
+    
     meanDff = mean(hozconcatDff);
     meanNonDff = mean(hozconcat_nonDff);
     %store meanDff and meanNonDff
@@ -151,13 +153,13 @@ title([fpObj.idvData(mouseNum).Description ' Bout'],'FontSize',10)
     set(gca,'TickDir','out'); % The only other option is 'in'
     
     
-    title([fpObj.idvData(numMouse).Description '  bar'],'FontSize',6)
+    title([fpObj.idvData(mouseNum).Description '  bar'],'FontSize',6)
     
-%     if saveFigures =='y' || saveFigures =='Y'
-%         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.jpg'])
-%         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.svg'])
-%     end
-
+    %     if saveFigures =='y' || saveFigures =='Y'
+    %         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.jpg'])
+    %         saveas(gcf,[fpObj.idvData(numMouse).Description '  bar.svg'])
+    %     end
+    
 end
 
 

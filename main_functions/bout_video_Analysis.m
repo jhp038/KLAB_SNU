@@ -18,7 +18,7 @@ fpObj = applyTrimmingOffset(fpObj);
 fpObj = calculatedFF_choice(fpObj);
 % [boutArray ~]= videoAnalysisGUI;
 
-boutArray = [255 53989; 1776 54807;317 53183;376 51644;349 53962;1151 54834;355 53745]
+boutArray = [309 27309; 645 27646];
 for i = 1: size(boutArray,1)
     fpObj.idvData(i).LEDOnIdx = boutArray(i,:);
 end
@@ -29,6 +29,6 @@ end
 %After you finish, please run this.
 fpObj = processVideoAnalysisData(fpObj)
 
-fpObj = plotVIdeoBout(fpObj);
+fpObj = plotVideoBout(fpObj);
 
 
