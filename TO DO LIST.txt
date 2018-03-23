@@ -1,6 +1,0 @@
-TO DO LIST
-
-1/25/2018
-
-1. Demo 만들어서 제일 밖에 놓기.
-2. GIT 에 정리후 올리기; pull and push 등등 function 익힌후 lab member들에게 알려주기.
