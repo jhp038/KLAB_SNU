@@ -179,6 +179,7 @@ end
 % timeV
 % dffMFBn
 % dffMLBn
+timeV = linspace(manualExamRange(1),manualExamRange(2),size(fpObj.idvData(1).meanFirstBout,2));
 
 fig1 = figure('Units',            'inch',                                 ...
     'Position',        [1 1 7 5]);
@@ -307,7 +308,7 @@ for i = 1:4
     ylabel(ylabelString);
     
     title(titleString,'FontSize',8)
-    ylim([-2 6])
+%     ylim([-2 6])
     plot([0 0],ylim,'Color',[1 0 0]);
     plot([0 0],ylim,'Color',[1 0 0]);
     set(gca,'TickDir','out'); % The only other option is 'in'

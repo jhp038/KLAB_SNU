@@ -4,7 +4,6 @@ clear all; close all
 %check if there is a previous iteration.
 % if there isnt, make one and save result in directory.
 
-
 %% load data
 msObj = msObjMake;
 
@@ -14,4 +13,4 @@ msObj = msTrimmingDataShock(msObj);
 msObj = msCalculateParaEvent(msObj);
 %% plotting function
 plotmsShock(msObj,'n')
-plotKmeansClustering(msObj,[-5 5],5,5000);
+plotKmeansClustering(msObj,[-5 5],3,5000);

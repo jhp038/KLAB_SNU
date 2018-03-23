@@ -239,7 +239,7 @@ end
 
 set(handles.mouseList,'String',colorID)
 
-disp(['accepted']);
+% disp(['accepted']);
 
 
 %trimming
@@ -258,9 +258,10 @@ plot([trimmingRange(selectedID,1) trimmingRange(selectedID,1)],ylim,'black');
 
 [trimmingRange(selectedID,2),~] = ginput(1);
 plot([trimmingRange(selectedID,2) trimmingRange(selectedID,2)],ylim,'black');
-disp(trimmingRange)
 %round trimming range
 trimmingRange = round(trimmingRange);
+disp('Chosen Index: ')
+disp(trimmingRange);
 
 if trimmingRange(selectedID,1) ~= 0   
     %added

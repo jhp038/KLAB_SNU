@@ -177,7 +177,7 @@ for neuronNum = 1: numTotalNeuron
     if saveFigures == 'y' || saveFigures == 'Y'
         export_fig(gcf,['neuronNum ' num2str(neuronNum) '.jpg'], '-depsc', '-painters')   
     else
-        %         pause
+                pause(.2)
     end
     clf
 end

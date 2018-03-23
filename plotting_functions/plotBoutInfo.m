@@ -7,15 +7,15 @@ numWindow = fpObj.numWindow;
 samplingRate = round(fpObj.samplingRate);
 mouseID = [];
 
-if exist('BoutInfoGraph') ~= 7
-    [status, ~, ~] = mkdir('BoutInfoGraph');
-    if status == 1
-        cd('BoutInfoGraph');
-    end
-else
-    cd('BoutInfoGraph');
-end
-figure('visible','off')
+% if exist('BoutInfoGraph') ~= 7
+%     [status, ~, ~] = mkdir('BoutInfoGraph');
+%     if status == 1
+%         cd('BoutInfoGraph');
+%     end
+% else
+%     cd('BoutInfoGraph');
+% end
+% figure('visible','off')
 
 %% licking vs norm max dFF
 for numMouse = 1:totalMouseNum

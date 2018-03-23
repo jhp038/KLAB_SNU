@@ -2,42 +2,25 @@
 
 
 %%
-obj = VideoReader('180123_HJ_Pupil_Ref2_LightOnOff.wmv');
-
-thisFrame = read(obj, 20);
-imshow(thisFrame)
-title('Select ROI')
-% ROI=imSelectROI(thisFrame);
-Selection = round(getrect,0);
-if any(Selection < 0)
-    disp(['Selected ROI is out of bounce. Please reselct!'])
-    Selection = round(getrect,0);  % Select the Area of Interest Using a Mouse
-else
-    rectangle('Position',Selection,'EdgeColor','r')
-    disp('ROI selected. Please close the image.')
-end
-
-
+obj = VideoReader('WIN_20180315_19_11_23_Pro_cut.avi');
 NumberOfFrames = obj.NumberOfFrames;
-
+% 
 la_imagen=read(obj,10);
-
+filas=size(la_imagen,1);
+columnas=size(la_imagen,2);
 % Center
-% centro_fila=round(filas/2);
-% centro_columna=round(columnas/2);
+centro_fila=round(filas/2);
+centro_columna=round(columnas/2);
  figure(1);
-for cnt = 1:NumberOfFrames       
-    temp_image=read(obj,cnt);
-    la_imagen=temp_image(round(Selection(2):Selection(2)+Selection(4),0),Selection(1):Selection(1)+Selection(3));
-    filas=size(la_imagen,1);
-    columnas=size(la_imagen,2);
-    
+for cnt = 1%%:NumberOfFrames       
+    la_imagen=read(obj,cnt);
     if size(la_imagen,3)==3
         la_imagen=rgb2gray(la_imagen);
     end
 
     subplot(212)
-    piel=~im2bw(la_imagen,0.15);
+    piel=~im2bw(la_imagen,0.2);
+    imagesc(piel)
     %     --
     piel=bwmorph(piel,'close');
     piel=bwmorph(piel,'open');
@@ -83,3 +66,22 @@ for cnt = 1:NumberOfFrames
     % --
     drawnow;
 end
+
+%%
+      BW1 = imread('circles.png');
+      figure, imshow(BW1)
+      BW2 = bwmorph(BW1,'remove');
+      BW3 = bwmorph(BW1,'skel',Inf);
+      figure, imshow(BW2)
+      figure, imshow(BW3)
+      
+      %% trying fuzzy c
+      imagesc(la_imagen)
+      [centers,U] = fcm(lim2double(a_imagen),3)
+      
+      figure
+      imagesc(U)
+
+      
+      
+      

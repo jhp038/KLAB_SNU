@@ -21,6 +21,8 @@ TTLThreshCrossings = diff(TTLeventON);      % Find threshold crossings by taking
 
 TTLOnIdx = find(TTLThreshCrossings == 1);      % Find crossings from below
 TTLOffIdx = find(TTLThreshCrossings == -1);      % Find crossings from below
+
+
 timeIdx = [wavTime(TTLOnIdx) wavTime(TTLOffIdx)];
 
 numTotalShock = size(TTLOnIdx,1);
@@ -29,6 +31,7 @@ videoShockIdx = [];
 videoShockIdx(:,1) = dsearchn(timeStamp,timeIdx(:,1));
 videoShockIdx(:,2) = dsearchn(timeStamp,timeIdx(:,2));
 
+%if there is an exception...
 if videoShockIdx(end) > size(timeStamp,1)
     videoShockIdx(end) =  size(timeStamp,1);
 end
