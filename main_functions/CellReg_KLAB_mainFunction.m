@@ -20,14 +20,14 @@ msObjShock_2 = msCalculateParaEvent(msObjShock_2);
 
 
 %% organizing data format to insert into CellReg
-neurons = {msObjShock_1.msData.neuron; msObjShock_2.msData.neuron}
-names = {msObjShock_1.msData.fileName; msObjShock_2.msData.fileName}
+neurons = {msObjShock_1.msData.neuron; msObjShock_2.msData.neuron};
+names = {msObjShock_1.msData.fileName; msObjShock_2.msData.fileName};
 
 
 
 
 %% CellReg
-cell_registered_struct=CellReg_KLAB(neurons,names);
+cell_registered_struct=CellReg_KLAB(neurons); % this function is adapted from CellReg main function. tune parameters like microns_per_pixel and maximal_distance
 
 indexMap = cell_registered_struct.cell_to_index_map;
 for i = 1:size(indexMap,1)
