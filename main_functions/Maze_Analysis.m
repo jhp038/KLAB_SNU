@@ -41,7 +41,7 @@ fpObj = calculateMeanandSTDofdFF(fpObj);
 fpObj = calculate2dNormdFF(fpObj);
 
 %Plot 2d heatmap
-% plot2dHeatmap(fpObj);
+plot2dHeatmap(fpObj);
 
 % Light-Dark Box Analysis
 % fpObj = getZoneTime(fpObj,zone number,vector of colum number about zone entrance);
